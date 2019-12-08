@@ -1,0 +1,2 @@
+-Isrc
+-Isrc/hazel/vendor/spdlog/include
