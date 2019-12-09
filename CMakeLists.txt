@@ -14,18 +14,26 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 # Enable warnings
 add_compile_options(-Wall -Wextra -Wpedantic)
 
+# Default to a release build
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
 #
 # Hazel
 #
 
-# Define the hazel library
-add_library(hazel SHARED
-  src/hazel/application.cpp
-  src/hazel/log.cpp
-)
+# Define the hazel shared library
+file(GLOB hazel_sources src/hazel/*.cpp)
+add_library(hazel SHARED ${hazel_sources})
 
-# Define HAZEL_SHARED_LIBRARY so it builds as a shared library
-target_compile_definitions(hazel PRIVATE HAZEL_SHARED_LIBRARY)
+# Build hazel as a shared library
+target_compile_definitions(hazel PRIVATE HZ_SHARED_LIBRARY HZ_PLATFORM_MAC)
+
+# Set defines for build type
+set(CMAKE_CXX_FLAGS_DEBUG -DHZ_DEBUG)
+set(CMAKE_CXX_FLAGS_RELEASE -DHZ_RELEASE)
+set(CMAKE_CXX_FLAGS_DIST -DHZ_DIST)
 
 # Include directories for hazel
 target_include_directories(hazel PUBLIC "${PROJECT_SOURCE_DIR}/src"
@@ -36,9 +44,8 @@ target_include_directories(hazel PUBLIC "${PROJECT_SOURCE_DIR}/src"
 #
 
 # Define sandbox application
-add_executable(sandbox
-  src/sandbox/app.cpp
-)
+file(GLOB sandbox_sources src/sandbox/*.cpp)
+add_executable(sandbox ${sandbox_sources})
 
 # Include directories for the sandbox application
 target_include_directories(sandbox PUBLIC "${PROJECT_SOURCE_DIR}/src")
