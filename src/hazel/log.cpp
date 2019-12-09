@@ -2,7 +2,8 @@
 
 #include "spdlog/sinks/stdout_color_sinks.h"
 
-namespace hazel {
+namespace hazel
+{
 std::shared_ptr<spdlog::logger> Log::core_logger_;
 std::shared_ptr<spdlog::logger> Log::client_logger_;
 

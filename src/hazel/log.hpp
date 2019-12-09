@@ -1,20 +1,20 @@
 #pragma once
 
+#include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
 
 #include "hazel/core.hpp"
 
-namespace hazel {
-class HZ_API Log {
+namespace hazel
+{
+
+class HZ_API Log
+{
 public:
   static void init();
 
-  inline static std::shared_ptr<spdlog::logger> &core_logger() {
-    return core_logger_;
-  }
-  inline static std::shared_ptr<spdlog::logger> &client_logger() {
-    return client_logger_;
-  }
+  inline static std::shared_ptr<spdlog::logger>& core_logger() { return core_logger_; }
+  inline static std::shared_ptr<spdlog::logger>& client_logger() { return client_logger_; }
 
   Log();
   ~Log();
@@ -23,6 +23,7 @@ private:
   static std::shared_ptr<spdlog::logger> core_logger_;
   static std::shared_ptr<spdlog::logger> client_logger_;
 };
+
 } // namespace hazel
 
 #define HZ_CORE_TRACE(...) ::hazel::Log::core_logger()->trace(__VA_ARGS__)

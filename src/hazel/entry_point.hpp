@@ -3,7 +3,7 @@
 #include "hazel/application.hpp"
 #include "hazel/log.hpp"
 
-int main(int, char **) {
+int main(int, char**) {
   hazel::Log::init();
   HZ_CORE_WARN("initialized log");
   int a = 5;

@@ -1,9 +1,12 @@
 #pragma once
 
 #include "hazel/core.hpp"
+#include "hazel/events/event.hpp"
 
-namespace hazel {
-class HZ_API Application {
+namespace hazel
+{
+class HZ_API Application
+{
 public:
   Application();
   virtual ~Application();
