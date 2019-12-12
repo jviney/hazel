@@ -2,8 +2,6 @@
 
 #include "hazel/events/event.hpp"
 
-#include <sstream>
-
 namespace hazel
 {
 

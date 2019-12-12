@@ -1,4 +1,6 @@
-#include "log.hpp"
+#include "hazel/core.hpp"
+
+#include "hazel/log.hpp"
 
 #include "spdlog/sinks/stdout_color_sinks.h"
 

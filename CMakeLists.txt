@@ -39,6 +39,13 @@ set(CMAKE_CXX_FLAGS_DIST -DHZ_DIST)
 target_include_directories(hazel PUBLIC "${PROJECT_SOURCE_DIR}/src"
                                         "${PROJECT_SOURCE_DIR}/src/hazel/vendor/spdlog/include")
 
+# Precompiled header
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/vendor/cotire/CMake")
+include(cotire)
+set_target_properties(hazel PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT src/hazel/core.hpp)
+set_target_properties(hazel PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
+cotire(hazel)
+
 #
 # Sandbox
 #
