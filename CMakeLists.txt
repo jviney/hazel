@@ -24,7 +24,7 @@ endif()
 #
 
 # Define the hazel shared library
-file(GLOB hazel_sources src/hazel/*.cpp)
+file(GLOB_RECURSE hazel_sources RELATIVE ${PROJECT_SOURCE_DIR} src/hazel/*.cpp)
 add_library(hazel SHARED ${hazel_sources})
 
 # Build hazel as a shared library
@@ -37,7 +37,11 @@ set(CMAKE_CXX_FLAGS_DIST -DHZ_DIST)
 
 # Include directories for hazel
 target_include_directories(hazel PUBLIC "${PROJECT_SOURCE_DIR}/src"
-                                        "${PROJECT_SOURCE_DIR}/src/hazel/vendor/spdlog/include")
+                                        "${PROJECT_SOURCE_DIR}/vendor/spdlog/include")
+
+# glfw (brew install glfw)
+find_package(glfw3 3.3 REQUIRED)
+target_link_libraries(hazel glfw)
 
 # Precompiled header
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/vendor/cotire/CMake")

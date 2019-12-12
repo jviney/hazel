@@ -5,4 +5,3 @@
 #include "hazel/application.hpp"
 #include "hazel/entry_point.hpp"
 #include "hazel/events/event.hpp"
-#include "hazel/log.hpp"

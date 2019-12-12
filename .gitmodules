@@ -1,6 +1,6 @@
-[submodule "src/hazel/vendor/spdlog"]
-	path = src/hazel/vendor/spdlog
-	url = https://github.com/gabime/spdlog
 [submodule "vendor/cotire"]
 	path = vendor/cotire
 	url = https://github.com/sakra/cotire.git
+[submodule "vendor/spdlog"]
+	path = vendor/spdlog
+	url = https://github.com/gabime/spdlog.git

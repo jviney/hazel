@@ -22,6 +22,7 @@ DerivePointerAlignment: false
 IndentPPDirectives: BeforeHash
 IndentWidth: 2
 PointerAlignment: Left
+SortIncludes: false
 SpaceAfterCStyleCast: true
 SpaceAfterTemplateKeyword: true
 SpaceBeforeAssignmentOperators: true
