@@ -33,7 +33,7 @@ public:
   virtual void set_vsync(bool enabled) = 0;
   virtual bool is_vsync() const = 0;
 
-  static Window* create(const WindowProps& props = WindowProps());
+  static std::unique_ptr<Window> create(const WindowProps& props = WindowProps());
 };
 
 } // namespace hazel
