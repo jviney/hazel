@@ -1,3 +1,4 @@
+.DS_Store
 /.clangd
 /build*
 /compile_commands.json

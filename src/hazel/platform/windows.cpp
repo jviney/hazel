@@ -7,6 +7,8 @@
 #include "hazel/events/application_event.hpp"
 #include "hazel/events/mouse_event.hpp"
 
+#include <glad/glad.h>
+
 static void glfw_error_callback(int error, const char* description) {
   HZ_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 }
@@ -41,6 +43,10 @@ void WindowsWindow::init(const WindowProps& props) {
   window_ = glfwCreateWindow((int) props.width, (int) props.height, data_.title.c_str(), nullptr,
                              nullptr);
   glfwMakeContextCurrent(window_);
+
+  int status = gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+  HZ_CORE_ASSERT(status, "failed to initializer glad");
+
   glfwSetWindowUserPointer(window_, &data_);
   set_vsync(true);
 
@@ -62,7 +68,7 @@ void WindowsWindow::init(const WindowProps& props) {
     data.event_callback(event);
   });
 
-  glfwSetKeyCallback(window_, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+  glfwSetKeyCallback(window_, [](GLFWwindow* window, int key, int, int action, int) {
     auto& data = *(WindowData*) glfwGetWindowUserPointer(window);
 
     switch (action) {
@@ -86,7 +92,7 @@ void WindowsWindow::init(const WindowProps& props) {
     }
   });
 
-  glfwSetMouseButtonCallback(window_, [](GLFWwindow* window, int button, int action, int mods) {
+  glfwSetMouseButtonCallback(window_, [](GLFWwindow* window, int button, int action, int) {
     auto& data = *(WindowData*) glfwGetWindowUserPointer(window);
 
     switch (action) {
