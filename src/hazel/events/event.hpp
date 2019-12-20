@@ -56,6 +56,7 @@ public:
   virtual std::string to_string() const { return name(); }
 
   inline bool is_in_category(EventCategory category) { return category_flags() & category; }
+  inline bool handled() const { return handled_; }
 
 protected:
   bool handled_ = false;

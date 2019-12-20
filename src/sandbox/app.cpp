@@ -2,10 +2,20 @@
 
 #include "hazel/hazel.hpp"
 
+class ExampleLayer : public hazel::Layer
+{
+public:
+  ExampleLayer() : Layer("Example") {}
+
+  void on_update() override { HZ_INFO("ExampleLayer::Update"); }
+
+  void on_event(hazel::Event& event) override { HZ_TRACE("{}", event); }
+};
+
 class Sandbox : public hazel::Application
 {
 public:
-  Sandbox() {}
+  Sandbox() { push_layer(new ExampleLayer()); }
 
   ~Sandbox() {}
 
