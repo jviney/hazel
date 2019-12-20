@@ -44,5 +44,3 @@
 #endif
 
 #define BIT(x) (1 << x)
-
-#include "hazel/log.hpp"

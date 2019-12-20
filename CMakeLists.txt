@@ -38,6 +38,7 @@ set(CMAKE_CXX_FLAGS_DIST -DHZ_DIST)
 # Include directories for hazel
 target_include_directories(hazel PUBLIC "${PROJECT_SOURCE_DIR}/src"
                                         "${PROJECT_SOURCE_DIR}/vendor/glad/include"
+                                        "${PROJECT_SOURCE_DIR}/vendor/imgui"
                                         "${PROJECT_SOURCE_DIR}/vendor/spdlog/include")
 
 # glfw (brew install glfw)
@@ -48,6 +49,10 @@ target_compile_options(hazel PRIVATE -DGLFW_INCLUDE_NONE)
 # glad
 add_subdirectory(vendor/glad)
 target_link_libraries(hazel glad)
+
+# imgui
+add_subdirectory(vendor/imgui)
+target_link_libraries(hazel imgui)
 
 # Precompiled header
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/vendor/cotire/CMake")

@@ -1,2 +1,4 @@
 -Isrc
+-Ivendor/glad/include
+-Ivendor/imgui
 -Ivendor/spdlog/include

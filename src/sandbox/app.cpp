@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "hazel/hazel.hpp"
+#include "hazel/imgui/imgui_layer.hpp"
 
 class ExampleLayer : public hazel::Layer
 {
@@ -15,7 +16,10 @@ public:
 class Sandbox : public hazel::Application
 {
 public:
-  Sandbox() { push_layer(std::make_unique<ExampleLayer>()); }
+  Sandbox() {
+    push_layer(std::make_unique<ExampleLayer>());
+    push_overlay(std::make_unique<hazel::ImGuiLayer>());
+  }
 
   ~Sandbox() {}
 

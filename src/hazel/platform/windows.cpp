@@ -1,11 +1,10 @@
 #include "hazel/core.hpp"
-
-#include "hazel/platform/windows.hpp"
-
+#include "hazel/log.hpp"
 #include "hazel/events/event.hpp"
 #include "hazel/events/key_event.hpp"
 #include "hazel/events/application_event.hpp"
 #include "hazel/events/mouse_event.hpp"
+#include "hazel/platform/windows.hpp"
 
 #include <glad/glad.h>
 
@@ -35,6 +34,13 @@ void WindowsWindow::init(const WindowProps& props) {
     // TODO: glfwTerminate on system shutdown
     int success = glfwInit();
     HZ_CORE_ASSERT(success, "Could not initialize GLFW!");
+
+    // Gets OpenGL 4.1 instead of 2.1
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     glfwSetErrorCallback(glfw_error_callback);
     is_glfw_initialized = true;

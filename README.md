@@ -15,6 +15,8 @@ Please support TheCherno on [Patreon](https://patreon.com/thecherno).
 ## Building
 
 ```
+brew install glfw
+
 git clone --recursive https://github.com/jviney/hazel
 cd hazel/build
 cmake ..
