@@ -15,7 +15,7 @@ public:
 class Sandbox : public hazel::Application
 {
 public:
-  Sandbox() { push_layer(new ExampleLayer()); }
+  Sandbox() { push_layer(std::make_unique<ExampleLayer>()); }
 
   ~Sandbox() {}
 

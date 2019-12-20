@@ -10,17 +10,17 @@ public:
   LayerStack();
   ~LayerStack();
 
-  void push_layer(Layer* layer);
-  void push_overlay(Layer* layer);
-  void pop_layer(Layer* layer);
-  void pop_overlay(Layer* overlay);
+  void push_layer(std::unique_ptr<Layer> layer);
+  void push_overlay(std::unique_ptr<Layer> overlay);
+  void pop_layer(std::unique_ptr<Layer> layer);
+  void pop_overlay(std::unique_ptr<Layer> overlay);
 
   auto begin() { return layers_.begin(); }
   auto end() { return layers_.end(); }
 
 private:
-  std::vector<Layer*> layers_;
-  std::vector<Layer*>::iterator layer_insert_;
+  std::vector<std::unique_ptr<Layer>> layers_;
+  std::vector<std::unique_ptr<Layer>>::iterator layer_insert_;
 };
 
 } // namespace hazel

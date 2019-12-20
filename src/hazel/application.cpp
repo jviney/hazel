@@ -15,9 +15,13 @@ Application::Application() {
 
 Application::~Application() {}
 
-void Application::push_layer(Layer* layer) { layer_stack_.push_layer(layer); }
+void Application::push_layer(std::unique_ptr<Layer> layer) {
+  layer_stack_.push_layer(std::move(layer));
+}
 
-void Application::push_overlay(Layer* layer) { layer_stack_.push_overlay(layer); }
+void Application::push_overlay(std::unique_ptr<Layer> layer) {
+  layer_stack_.push_overlay(std::move(layer));
+}
 
 void Application::on_event(Event& event) {
   HZ_CORE_TRACE("{}", event);
@@ -35,7 +39,7 @@ void Application::on_event(Event& event) {
 
 void Application::run() {
   while (running_) {
-    for (auto* layer : layer_stack_) {
+    for (auto& layer : layer_stack_) {
       layer->on_update();
     }
 
