@@ -36,10 +36,13 @@ set(CMAKE_CXX_FLAGS_RELEASE -DHZ_RELEASE)
 set(CMAKE_CXX_FLAGS_DIST -DHZ_DIST)
 
 # Include directories for hazel
-target_include_directories(hazel PUBLIC "${PROJECT_SOURCE_DIR}/src"
-                                        "${PROJECT_SOURCE_DIR}/vendor/glad/include"
-                                        "${PROJECT_SOURCE_DIR}/vendor/imgui"
-                                        "${PROJECT_SOURCE_DIR}/vendor/spdlog/include")
+target_include_directories(hazel PUBLIC
+  "${PROJECT_SOURCE_DIR}/src"
+  "${PROJECT_SOURCE_DIR}/vendor/glad/include"
+  "${PROJECT_SOURCE_DIR}/vendor/glm"
+  "${PROJECT_SOURCE_DIR}/vendor/imgui"
+  "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"
+)
 
 # glfw (brew install glfw)
 find_package(glfw3 3.3 REQUIRED)
