@@ -28,6 +28,9 @@ public:
   virtual unsigned int height() const = 0;
   virtual unsigned int width() const = 0;
 
+  virtual float content_scale_x() const = 0;
+  virtual float content_scale_y() const = 0;
+
   // Window attributes
   virtual void set_event_callback(const EventCallbackFn& callback) = 0;
   virtual void set_vsync(bool enabled) = 0;

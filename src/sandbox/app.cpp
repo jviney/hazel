@@ -8,7 +8,7 @@ class ExampleLayer : public hazel::Layer
 public:
   ExampleLayer() : Layer("Example") {}
 
-  void on_update() override { HZ_INFO("ExampleLayer::Update"); }
+  void on_update() override {}
 
   void on_event(hazel::Event& event) override { HZ_TRACE("{}", event); }
 };

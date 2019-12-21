@@ -3,6 +3,8 @@
 #include "hazel/application.hpp"
 #include "hazel/events/application_event.hpp"
 
+#include <glad/glad.h>
+
 namespace hazel
 {
 
@@ -46,6 +48,9 @@ void Application::on_event(Event& event) {
 
 void Application::run() {
   while (running_) {
+    glClearColor(1, 0, 1, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
     for (auto& layer : layer_stack_) {
       layer->on_update();
     }

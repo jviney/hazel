@@ -62,10 +62,13 @@ void WindowsWindow::init(const WindowProps& props) {
 
     data.width = width;
     data.height = height;
+    std::cout << "YES\n";
 
     auto event = WindowResizeEvent(width, height);
     data.event_callback(event);
   });
+
+  glfwGetWindowContentScale(window_, &data_.content_scale_x, &data_.content_scale_y);
 
   glfwSetWindowCloseCallback(window_, [](GLFWwindow* window) {
     auto& data = *(WindowData*) glfwGetWindowUserPointer(window);
@@ -96,6 +99,13 @@ void WindowsWindow::init(const WindowProps& props) {
       break;
     }
     }
+  });
+
+  glfwSetCharCallback(window_, [](GLFWwindow* window, unsigned int key_code) {
+    auto& data = *(WindowData*) glfwGetWindowUserPointer(window);
+
+    auto event = KeyTypedEvent(key_code);
+    data.event_callback(event);
   });
 
   glfwSetMouseButtonCallback(window_, [](GLFWwindow* window, int button, int action, int) {

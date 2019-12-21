@@ -17,6 +17,8 @@ public:
 
   unsigned int width() const override { return data_.width; }
   unsigned int height() const override { return data_.height; }
+  float content_scale_x() const override { return data_.content_scale_x; }
+  float content_scale_y() const override { return data_.content_scale_y; }
 
   // Window attributes
   void set_event_callback(const EventCallbackFn& callback) override {
@@ -34,6 +36,7 @@ private:
   struct WindowData {
     std::string title;
     unsigned int width, height;
+    float content_scale_x, content_scale_y;
     bool vsync;
     EventCallbackFn event_callback;
   };

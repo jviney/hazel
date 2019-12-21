@@ -1,11 +1,16 @@
 #include "hazel/core.hpp"
 
+#include "hazel/log.hpp"
 #include "hazel/application.hpp"
+#include "hazel/events/event.hpp"
 #include "hazel/imgui/imgui_layer.hpp"
 
 #include <imgui.h>
 #include "hazel/platform/opengl/imgui_opengl_renderer.h"
-#include "GLFW/glfw3.h"
+
+// TEMPORARY
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 namespace hazel
 {
@@ -54,7 +59,10 @@ void ImGuiLayer::on_detach() {}
 void ImGuiLayer::on_update() {
   ImGuiIO& io = ImGui::GetIO();
   auto& app = Application::get();
-  io.DisplaySize = ImVec2(app.window()->width(), app.window()->height());
+
+  auto const& window = app.window();
+  io.DisplaySize = ImVec2(window->width(), window->height());
+  io.DisplayFramebufferScale = ImVec2(window->content_scale_x(), window->content_scale_y());
 
   float time = (float) glfwGetTime();
   io.DeltaTime = time_ > 0.0 ? time - time_ : 1.0f / 60.0f;
@@ -70,6 +78,91 @@ void ImGuiLayer::on_update() {
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void ImGuiLayer::on_event(Event& event) {}
+void ImGuiLayer::on_event(Event& event) {
+  auto dispatcher = EventDispatcher(event);
+  dispatcher.dispatch<MouseButtonPressedEvent>(
+      HZ_BIND_EVENT_FN(ImGuiLayer::on_mouse_button_pressed_event));
+  dispatcher.dispatch<MouseButtonReleasedEvent>(
+      HZ_BIND_EVENT_FN(ImGuiLayer::on_mouse_button_released_event));
+  dispatcher.dispatch<MouseMovedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::on_mouse_moved_event));
+  dispatcher.dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::on_mouse_scrolled_event));
+  dispatcher.dispatch<KeyPressedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::on_key_pressed_event));
+  dispatcher.dispatch<KeyTypedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::on_key_typed_event));
+  dispatcher.dispatch<KeyReleasedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::on_key_released_event));
+  dispatcher.dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::on_window_resize_event));
+}
+
+bool ImGuiLayer::on_mouse_button_pressed_event(MouseButtonPressedEvent& e) {
+  ImGuiIO& io = ImGui::GetIO();
+  io.MouseDown[e.mouse_button()] = true;
+
+  return false;
+}
+
+bool ImGuiLayer::on_mouse_button_released_event(MouseButtonReleasedEvent& e) {
+  ImGuiIO& io = ImGui::GetIO();
+  io.MouseDown[e.mouse_button()] = false;
+
+  return false;
+}
+
+bool ImGuiLayer::on_mouse_moved_event(MouseMovedEvent& e) {
+  HZ_CORE_TRACE("ImGui::on_mouse_moved_event");
+  ImGuiIO& io = ImGui::GetIO();
+  io.MousePos = ImVec2(e.x(), e.y());
+
+  return false;
+}
+
+bool ImGuiLayer::on_mouse_scrolled_event(MouseScrolledEvent& e) {
+  ImGuiIO& io = ImGui::GetIO();
+  io.MouseWheelH += e.x_offset();
+  io.MouseWheel += e.y_offset();
+
+  return false;
+}
+
+bool ImGuiLayer::on_key_pressed_event(KeyPressedEvent& e) {
+  ImGuiIO& io = ImGui::GetIO();
+
+  io.KeysDown[e.key_code()] = true;
+
+  io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
+  io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
+  io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
+  io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+
+  return false;
+}
+
+bool ImGuiLayer::on_key_released_event(KeyReleasedEvent& e) {
+  ImGuiIO& io = ImGui::GetIO();
+  io.KeysDown[e.key_code()] = false;
+
+  return false;
+}
+
+bool ImGuiLayer::on_key_typed_event(KeyTypedEvent& e) {
+  ImGuiIO& io = ImGui::GetIO();
+
+  int key_code = e.key_code();
+  if (key_code > 0 && key_code < 0x10000) {
+    io.AddInputCharacter((unsigned short) key_code);
+  }
+
+  return false;
+}
+
+bool ImGuiLayer::on_window_resize_event(WindowResizeEvent& e) {
+  // These io changes are probably not necessary because on_update sets them anyway.
+  auto const& window = Application::get().window();
+  ImGuiIO& io = ImGui::GetIO();
+  io.DisplaySize = ImVec2(e.width(), e.height());
+  io.DisplayFramebufferScale = ImVec2(window->content_scale_x(), window->content_scale_y());
+
+  glViewport(0, 0, e.width(), e.height());
+
+  return false;
+}
 
 } // namespace hazel

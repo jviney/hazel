@@ -4,11 +4,11 @@ This repository is following the game engine series by [TheCherno](https://www.y
 
 It is being developed on macOS using VS Code with a CMake build system, instead of Windows using Visual Studio with Premake.
 
-Other differences:
+Changes for macOS and CMake:
 
-- snake case instead of camel case (personal preference)
-- slightly different directory layout
-- `.hpp` instead of `.h` for header files
+- `glfwWindowHint()` calls to get macOS to load OpenGL 4.1.
+- Correct scaling for retina displays with ImGui.
+- ImGui git submodule uses a fork with CMake support.
 
 Please support TheCherno on [Patreon](https://patreon.com/thecherno).
 
