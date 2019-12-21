@@ -17,8 +17,12 @@ Application::Application() {
   HZ_CORE_ASSERT(!Application::instance_, "application already exists");
   instance_ = this;
 
-  window_ = std::unique_ptr<Window>(Window::create());
+  window_ = Window::create();
   window_->set_event_callback(BIND_EVENT_FN(on_event));
+
+  auto imgui_layer = std::make_unique<ImGuiLayer>();
+  imgui_layer_ = imgui_layer.get();
+  push_overlay(std::move(imgui_layer));
 }
 
 Application::~Application() {}
@@ -56,10 +60,16 @@ void Application::run() {
       layer->on_update();
     }
 
-    auto [x, y] = Input::mouse_position();
-    HZ_CORE_TRACE("{0}, {1}", x, y);
+    imgui_layer_->begin();
+    for (auto& layer : layer_stack_) {
+      layer->on_imgui_render();
+    }
+    imgui_layer_->end();
 
     window_->on_update();
+
+    auto [x, y] = Input::mouse_position();
+    HZ_CORE_TRACE("{0}, {1}", x, y);
   }
 }
 

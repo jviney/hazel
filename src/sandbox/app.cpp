@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <imgui.h>
+
 #include "hazel/hazel.hpp"
 #include "hazel/imgui/imgui_layer.hpp"
 
@@ -10,16 +12,19 @@ public:
 
   void on_update() override {}
 
+  void on_imgui_render() override {
+    ImGui::Begin("Test");
+    ImGui::TextUnformatted("Hello");
+    ImGui::End();
+  }
+
   void on_event(hazel::Event& event) override { HZ_TRACE("{}", event); }
 };
 
 class Sandbox : public hazel::Application
 {
 public:
-  Sandbox() {
-    push_layer(std::make_unique<ExampleLayer>());
-    push_overlay(std::make_unique<hazel::ImGuiLayer>());
-  }
+  Sandbox() { push_layer(std::make_unique<ExampleLayer>()); }
 
   ~Sandbox() {}
 

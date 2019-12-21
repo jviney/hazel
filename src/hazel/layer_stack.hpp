@@ -20,7 +20,7 @@ public:
 
 private:
   std::vector<std::unique_ptr<Layer>> layers_;
-  std::vector<std::unique_ptr<Layer>>::iterator layer_insert_;
+  unsigned int layer_insert_index_ = 0;
 };
 
 } // namespace hazel

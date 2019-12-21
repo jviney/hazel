@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hazel/events/application_event.hpp"
+#include "hazel/imgui/imgui_layer.hpp"
 #include "hazel/layer_stack.hpp"
 #include "hazel/window.hpp"
 
@@ -26,6 +27,7 @@ public:
 private:
   virtual bool on_window_close(WindowCloseEvent& e);
   std::unique_ptr<Window> window_;
+  ImGuiLayer* imgui_layer_;
   bool running_ = true;
   LayerStack layer_stack_;
 

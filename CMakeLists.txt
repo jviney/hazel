@@ -46,16 +46,16 @@ target_include_directories(hazel PUBLIC
 
 # glfw (brew install glfw)
 find_package(glfw3 3.3 REQUIRED)
-target_link_libraries(hazel glfw)
+target_link_libraries(hazel PRIVATE glfw)
 target_compile_options(hazel PRIVATE -DGLFW_INCLUDE_NONE)
 
 # glad
 add_subdirectory(vendor/glad)
-target_link_libraries(hazel glad)
+target_link_libraries(hazel PRIVATE glad)
 
 # imgui
 add_subdirectory(vendor/imgui)
-target_link_libraries(hazel imgui)
+target_link_libraries(hazel PRIVATE imgui)
 
 # Precompiled header
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/vendor/cotire/CMake")

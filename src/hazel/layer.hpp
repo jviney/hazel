@@ -15,6 +15,7 @@ public:
   virtual void on_detach() {}
   virtual void on_update() {}
   virtual void on_event(Event& /*event */) {}
+  virtual void on_imgui_render() {}
 
   const std::string& name() const { return debug_name_; }
 
