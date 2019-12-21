@@ -61,8 +61,8 @@ void ImGuiLayer::on_update() {
   auto& app = Application::get();
 
   auto const& window = app.window();
-  io.DisplaySize = ImVec2(window->width(), window->height());
-  io.DisplayFramebufferScale = ImVec2(window->content_scale_x(), window->content_scale_y());
+  io.DisplaySize = ImVec2(window.width(), window.height());
+  io.DisplayFramebufferScale = ImVec2(window.content_scale_x(), window.content_scale_y());
 
   float time = (float) glfwGetTime();
   io.DeltaTime = time_ > 0.0 ? time - time_ : 1.0f / 60.0f;
@@ -158,7 +158,7 @@ bool ImGuiLayer::on_window_resize_event(WindowResizeEvent& e) {
   auto const& window = Application::get().window();
   ImGuiIO& io = ImGui::GetIO();
   io.DisplaySize = ImVec2(e.width(), e.height());
-  io.DisplayFramebufferScale = ImVec2(window->content_scale_x(), window->content_scale_y());
+  io.DisplayFramebufferScale = ImVec2(window.content_scale_x(), window.content_scale_y());
 
   glViewport(0, 0, e.width(), e.height());
 

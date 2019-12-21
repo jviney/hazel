@@ -4,7 +4,7 @@
 #include "hazel/events/key_event.hpp"
 #include "hazel/events/application_event.hpp"
 #include "hazel/events/mouse_event.hpp"
-#include "hazel/platform/windows.hpp"
+#include "hazel/platform/windows/windows.hpp"
 
 #include <glad/glad.h>
 
@@ -14,6 +14,7 @@ static void glfw_error_callback(int error, const char* description) {
 
 namespace hazel
 {
+
 static bool is_glfw_initialized = false;
 
 std::unique_ptr<Window> Window::create(const WindowProps& props) {

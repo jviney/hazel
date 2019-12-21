@@ -21,7 +21,7 @@ public:
   void push_layer(std::unique_ptr<Layer> layer);
   void push_overlay(std::unique_ptr<Layer> layer);
 
-  inline auto& window() { return window_; }
+  inline auto& window() { return *window_; }
 
 private:
   virtual bool on_window_close(WindowCloseEvent& e);

@@ -1,3 +1,4 @@
+-I/usr/local/include
 -Isrc
 -Ivendor/glad/include
 -Ivendor/imgui
