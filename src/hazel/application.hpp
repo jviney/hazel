@@ -7,7 +7,7 @@
 
 namespace hazel
 {
-class HZ_API Application
+class Application
 {
 public:
   Application();

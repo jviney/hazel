@@ -5,7 +5,7 @@
 namespace hazel
 {
 
-class HZ_API Input
+class Input
 {
 public:
   virtual ~Input() {}

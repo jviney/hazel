@@ -5,7 +5,7 @@
 
 namespace hazel
 {
-class HZ_API Layer
+class Layer
 {
 public:
   Layer(const std::string& debug_name = "Layer");

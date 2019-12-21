@@ -4,7 +4,7 @@
 
 namespace hazel
 {
-class HZ_API LayerStack
+class LayerStack
 {
 public:
   LayerStack();

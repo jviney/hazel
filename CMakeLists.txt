@@ -23,12 +23,11 @@ endif()
 # Hazel
 #
 
-# Define the hazel shared library
+# Define the hazel static library
 file(GLOB_RECURSE hazel_sources RELATIVE ${PROJECT_SOURCE_DIR} src/hazel/*.cpp)
-add_library(hazel SHARED ${hazel_sources})
+add_library(hazel STATIC ${hazel_sources})
 
-# Build hazel as a shared library
-target_compile_definitions(hazel PRIVATE HZ_SHARED_LIBRARY HZ_PLATFORM_MAC)
+target_compile_definitions(hazel PRIVATE HZ_PLATFORM_MAC)
 
 # Set defines for build type
 set(CMAKE_CXX_FLAGS_DEBUG -DHZ_DEBUG)
