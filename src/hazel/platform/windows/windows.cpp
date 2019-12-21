@@ -4,6 +4,7 @@
 #include "hazel/events/key_event.hpp"
 #include "hazel/events/application_event.hpp"
 #include "hazel/events/mouse_event.hpp"
+#include "hazel/platform/opengl/opengl_context.hpp"
 #include "hazel/platform/windows/windows.hpp"
 
 #include <glad/glad.h>
@@ -49,10 +50,9 @@ void WindowsWindow::init(const WindowProps& props) {
 
   window_ = glfwCreateWindow((int) props.width, (int) props.height, data_.title.c_str(), nullptr,
                              nullptr);
-  glfwMakeContextCurrent(window_);
 
-  int status = gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
-  HZ_CORE_ASSERT(status, "failed to initialize glad");
+  context_ = std::make_unique<OpenGLContext>(window_);
+  context_->init();
 
   glfwSetWindowUserPointer(window_, &data_);
   set_vsync(true);
@@ -143,9 +143,10 @@ void WindowsWindow::init(const WindowProps& props) {
 }
 
 void WindowsWindow::shutdown() { glfwDestroyWindow(window_); }
+
 void WindowsWindow::on_update() {
   glfwPollEvents();
-  glfwSwapBuffers(window_);
+  context_->swap_buffers();
 }
 
 void WindowsWindow::set_vsync(bool enabled) {

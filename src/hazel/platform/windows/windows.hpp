@@ -2,6 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include "hazel/renderer/graphics_context.hpp"
 #include "hazel/window.hpp"
 
 namespace hazel
@@ -34,6 +35,8 @@ private:
   virtual void shutdown();
 
   GLFWwindow* window_;
+
+  std::unique_ptr<GraphicsContext> context_;
 
   struct WindowData {
     std::string title;
