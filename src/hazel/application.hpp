@@ -31,6 +31,8 @@ private:
   bool running_ = true;
   LayerStack layer_stack_;
 
+  unsigned int vertex_array_, vertex_buffer_, index_buffer_;
+
   static Application* instance_;
 };
 

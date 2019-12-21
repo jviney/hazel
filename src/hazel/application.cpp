@@ -1,5 +1,5 @@
-#include "hazel/core.hpp"
 #include "hazel/log.hpp"
+#include "hazel/core.hpp"
 #include "hazel/application.hpp"
 #include "hazel/events/application_event.hpp"
 #include "hazel/input.hpp"
@@ -23,6 +23,36 @@ Application::Application() {
   auto imgui_layer = std::make_unique<ImGuiLayer>();
   imgui_layer_ = imgui_layer.get();
   push_overlay(std::move(imgui_layer));
+
+  // Triangle
+  //
+  // No triangle visible because it appears that this OpenGL implementation
+  // (macOS 10.15, Intel Iris Graphics 550) does not have a default shader.
+  glGenVertexArrays(1, &vertex_array_);
+  glBindVertexArray(vertex_array_);
+
+  glGenBuffers(1, &vertex_buffer_);
+  glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+
+  // clang-format off
+  float vertices[3 * 3] = {
+    -0.5f, -0.5f, 0.0f,
+     0.5f, -0.5f, 0.0f,
+     0.0f,  0.5f, 0.0f
+  };
+  // clang-format on
+
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+
+  // Index buffer
+  glGenBuffers(1, &index_buffer_);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer_);
+
+  unsigned int indices[3] = {0, 1, 2};
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 }
 
 Application::~Application() {}
@@ -53,8 +83,11 @@ void Application::on_event(Event& event) {
 
 void Application::run() {
   while (running_) {
-    glClearColor(1, 0, 1, 1);
+    glClearColor(0.2f, 0.2f, 0.2f, 1);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glBindVertexArray(vertex_array_);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
     for (auto& layer : layer_stack_) {
       layer->on_update();
@@ -67,9 +100,6 @@ void Application::run() {
     imgui_layer_->end();
 
     window_->on_update();
-
-    auto [x, y] = Input::mouse_position();
-    HZ_CORE_TRACE("{0}, {1}", x, y);
   }
 }
 
