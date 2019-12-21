@@ -1,6 +1,8 @@
 # Hazel
 
-This repository is following the game engine series by [TheCherno](https://www.youtube.com/user/TheChernoProject).
+This repository is following the
+[game engine series](https://www.youtube.com/playlist?list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT)
+by [TheCherno](https://www.youtube.com/user/TheChernoProject).
 
 It is being developed on macOS using VS Code with a CMake build system, instead of Windows using Visual Studio with Premake.
 

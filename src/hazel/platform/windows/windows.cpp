@@ -52,7 +52,7 @@ void WindowsWindow::init(const WindowProps& props) {
   glfwMakeContextCurrent(window_);
 
   int status = gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
-  HZ_CORE_ASSERT(status, "failed to initializer glad");
+  HZ_CORE_ASSERT(status, "failed to initialize glad");
 
   glfwSetWindowUserPointer(window_, &data_);
   set_vsync(true);
