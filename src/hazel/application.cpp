@@ -12,7 +12,7 @@ namespace hazel
 
 Application* Application::instance_ = nullptr;
 
-Application::Application() : camera_(-1.6f, 1.6f, -0.9f, 0.9f) {
+Application::Application() {
   HZ_CORE_ASSERT(!Application::instance_, "application already exists");
   instance_ = this;
 
@@ -22,115 +22,6 @@ Application::Application() : camera_(-1.6f, 1.6f, -0.9f, 0.9f) {
   auto imgui_layer = std::make_unique<ImGuiLayer>();
   imgui_layer_ = imgui_layer.get();
   push_overlay(std::move(imgui_layer));
-
-  // clang-format off
-  float vertices[] = {
-    -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
-     0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-     0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
-  };
-  // clang-format on
-
-  std::shared_ptr<VertexBuffer> vertex_buffer = VertexBuffer::create(vertices, sizeof(vertices));
-
-  BufferLayout layout = {{ShaderDataType::Float3, "a_position"},
-                         {ShaderDataType::Float4, "a_color"}};
-
-  vertex_buffer->set_layout(layout);
-
-  // Index buffer
-  uint32_t indices[3] = {0, 1, 2};
-  std::shared_ptr<IndexBuffer> index_buffer =
-      IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t));
-
-  vertex_array_ = VertexArray::create();
-  vertex_array_->add_vertex_buffer(vertex_buffer);
-  vertex_array_->set_index_buffer(index_buffer);
-
-  // Square
-  square_va_ = VertexArray::create();
-
-  // clang-format off
-  float square_vertices[] = {
-    -0.75f, -0.75f, 0.0f, 
-     0.75f, -0.75f, 0.0f, 
-     0.75f,  0.75f, 0.0f, 
-    -0.75f,  0.75f, 0.0f, 
-  };
-  // clang-format on
-
-  std::shared_ptr<VertexBuffer> square_vb =
-      VertexBuffer::create(square_vertices, sizeof(square_vertices));
-  square_vb->set_layout({{ShaderDataType::Float3, "a_position"}});
-  square_va_->add_vertex_buffer(square_vb);
-
-  uint32_t square_indices[] = {0, 1, 2, 2, 3, 0};
-  std::shared_ptr<IndexBuffer> square_ib =
-      IndexBuffer::create(square_indices, sizeof(square_indices) / sizeof(uint32_t));
-  square_va_->set_index_buffer(square_ib);
-
-  auto vertex_source = R"(
-    #version 330 core
-
-    layout(location = 0) in vec3 a_position;
-    layout(location = 1) in vec4 a_color;
-
-    uniform mat4 u_view_projection;
-
-    out vec3 v_position;
-    out vec4 v_color;
-
-    void main() {
-      v_position = a_position;
-      v_color = a_color;
-      gl_Position = u_view_projection * vec4(a_position, 1.0);
-    }
-  )";
-
-  auto fragment_source = R"(
-    #version 330 core
-
-    layout(location = 0) out vec4 color;
-
-    in vec3 v_position;
-    in vec4 v_color;
-
-    void main() {
-      color = vec4(v_position * 0.5 + 0.5, 1.0);
-      color = v_color;
-    }
-  )";
-
-  shader_ = std::make_unique<Shader>(vertex_source, fragment_source);
-
-  auto blue_shader_vertex_source = R"(
-    #version 330 core
-
-    layout(location = 0) in vec3 a_position;
-
-    uniform mat4 u_view_projection;
-
-    out vec3 v_position;
-
-    void main() {
-      v_position = a_position;
-      gl_Position = u_view_projection * vec4(a_position, 1.0);
-    }
-  )";
-
-  auto blue_shader_fragment_source = R"(
-    #version 330 core
-
-    layout(location = 0) out vec4 color;
-
-    in vec3 v_position;
-
-    void main() {
-      color = vec4(0.2, 0.3, 0.8, 1.0);
-    }
-  )";
-
-  blue_shader_ = std::make_unique<Shader>(blue_shader_vertex_source, blue_shader_fragment_source);
 }
 
 Application::~Application() {}
@@ -161,19 +52,6 @@ void Application::on_event(Event& event) {
 
 void Application::run() {
   while (running_) {
-    RenderCommand::set_clear_color({0.25, 0.2f, 0.2f, 1.0f});
-    RenderCommand::clear();
-
-    camera_.set_position({0.5f, 0.5f, 0.0f});
-    camera_.set_rotation(45.0f);
-
-    Renderer::begin_scene(camera_);
-
-    Renderer::submit(blue_shader_.get(), square_va_.get());
-    Renderer::submit(shader_.get(), vertex_array_.get());
-
-    Renderer::end_scene();
-
     for (auto& layer : layer_stack_) {
       layer->on_update();
     }
