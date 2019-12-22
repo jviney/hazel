@@ -9,6 +9,7 @@ It is being developed on macOS using VS Code with a CMake build system, instead 
 Changes for macOS and CMake:
 
 - `glfwWindowHint()` calls to get macOS to load OpenGL 4.1.
+- Limited to OpenGL 4.1 because that is all macOS supports.
 - Correct scaling for retina displays with ImGui.
 - ImGui git submodule uses a fork with CMake support.
 
