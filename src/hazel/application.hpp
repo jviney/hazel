@@ -5,6 +5,7 @@
 #include "hazel/layer_stack.hpp"
 #include "hazel/renderer/buffer.hpp"
 #include "hazel/renderer/shader.hpp"
+#include "hazel/renderer/vertex_array.hpp"
 #include "hazel/window.hpp"
 
 namespace hazel
@@ -33,10 +34,11 @@ private:
   bool running_ = true;
   LayerStack layer_stack_;
 
-  unsigned int vertex_array_;
-  std::unique_ptr<VertexBuffer> vertex_buffer_;
-  std::unique_ptr<IndexBuffer> index_buffer_;
-  std::unique_ptr<Shader> shader_;
+  std::shared_ptr<VertexArray> vertex_array_;
+  std::shared_ptr<Shader> shader_;
+
+  std::shared_ptr<VertexArray> square_va_;
+  std::shared_ptr<Shader> blue_shader_;
 
   static Application* instance_;
 };

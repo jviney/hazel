@@ -13,31 +13,6 @@ namespace hazel
 
 Application* Application::instance_ = nullptr;
 
-static GLenum shader_data_type_to_opengl_base_type(ShaderDataType type) {
-  switch (type) {
-  case ShaderDataType::None:
-    HZ_CORE_ASSERT(false, "unknown ShaderDataType");
-    return 0;
-
-  case ShaderDataType::Float:
-  case ShaderDataType::Float2:
-  case ShaderDataType::Float3:
-  case ShaderDataType::Float4:
-  case ShaderDataType::Mat3:
-  case ShaderDataType::Mat4:
-    return GL_FLOAT;
-
-  case ShaderDataType::Int:
-  case ShaderDataType::Int2:
-  case ShaderDataType::Int3:
-  case ShaderDataType::Int4:
-    return GL_INT;
-
-  case ShaderDataType::Bool:
-    return GL_BOOL;
-  }
-}
-
 Application::Application() {
   HZ_CORE_ASSERT(!Application::instance_, "application already exists");
   instance_ = this;
@@ -49,10 +24,6 @@ Application::Application() {
   imgui_layer_ = imgui_layer.get();
   push_overlay(std::move(imgui_layer));
 
-  // Triangle
-  glGenVertexArrays(1, &vertex_array_);
-  glBindVertexArray(vertex_array_);
-
   // clang-format off
   float vertices[] = {
     -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -61,29 +32,43 @@ Application::Application() {
   };
   // clang-format on
 
-  vertex_buffer_ = VertexBuffer::create(vertices, sizeof(vertices));
+  std::shared_ptr<VertexBuffer> vertex_buffer = VertexBuffer::create(vertices, sizeof(vertices));
 
-  {
-    BufferLayout layout = {{ShaderDataType::Float3, "a_position"},
-                           {ShaderDataType::Float4, "a_color"}};
+  BufferLayout layout = {{ShaderDataType::Float3, "a_position"},
+                         {ShaderDataType::Float4, "a_color"}};
 
-    vertex_buffer_->set_layout(layout);
-  }
-
-  uint32_t index = 0;
-  auto const& layout = vertex_buffer_->layout();
-  for (const auto& element : layout) {
-    glEnableVertexAttribArray(index);
-    glVertexAttribPointer(index, element.component_count(),
-                          shader_data_type_to_opengl_base_type(element.type),
-                          element.normalized ? GL_TRUE : GL_FALSE, layout.stride(),
-                          (const void*) (uintptr_t) element.offset);
-    index++;
-  }
+  vertex_buffer->set_layout(layout);
 
   // Index buffer
   uint32_t indices[3] = {0, 1, 2};
-  index_buffer_ = IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t));
+  std::shared_ptr<IndexBuffer> index_buffer =
+      IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t));
+
+  vertex_array_ = VertexArray::create();
+  vertex_array_->add_vertex_buffer(vertex_buffer);
+  vertex_array_->set_index_buffer(index_buffer);
+
+  // Square
+  square_va_ = VertexArray::create();
+
+  // clang-format off
+  float square_vertices[] = {
+    -0.75f, -0.75f, 0.0f, 
+     0.75f, -0.75f, 0.0f, 
+     0.75f,  0.75f, 0.0f, 
+    -0.75f,  0.75f, 0.0f, 
+  };
+  // clang-format on
+
+  std::shared_ptr<VertexBuffer> square_vb =
+      VertexBuffer::create(square_vertices, sizeof(square_vertices));
+  square_vb->set_layout({{ShaderDataType::Float3, "a_position"}});
+  square_va_->add_vertex_buffer(square_vb);
+
+  uint32_t square_indices[] = {0, 1, 2, 2, 3, 0};
+  std::shared_ptr<IndexBuffer> square_ib =
+      IndexBuffer::create(square_indices, sizeof(square_indices) / sizeof(uint32_t));
+  square_va_->set_index_buffer(square_ib);
 
   auto vertex_source = R"(
     #version 330 core
@@ -116,6 +101,33 @@ Application::Application() {
   )";
 
   shader_ = std::make_unique<Shader>(vertex_source, fragment_source);
+
+  auto blue_shader_vertex_source = R"(
+    #version 330 core
+
+    layout(location = 0) in vec3 a_position;
+
+    out vec3 v_position;
+
+    void main() {
+      v_position = a_position;
+      gl_Position = vec4(a_position, 1.0);
+    }
+  )";
+
+  auto blue_shader_fragment_source = R"(
+    #version 330 core
+
+    layout(location = 0) out vec4 color;
+
+    in vec3 v_position;
+
+    void main() {
+      color = vec4(0.2, 0.3, 0.8, 1.0);
+    }
+  )";
+
+  blue_shader_ = std::make_unique<Shader>(blue_shader_vertex_source, blue_shader_fragment_source);
 }
 
 Application::~Application() {}
@@ -149,9 +161,13 @@ void Application::run() {
     glClearColor(0.2f, 0.2f, 0.2f, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    blue_shader_->bind();
+    square_va_->bind();
+    glDrawElements(GL_TRIANGLES, square_va_->index_buffer()->count(), GL_UNSIGNED_INT, nullptr);
+
     shader_->bind();
-    glBindVertexArray(vertex_array_);
-    glDrawElements(GL_TRIANGLES, index_buffer_->count(), GL_UNSIGNED_INT, nullptr);
+    vertex_array_->bind();
+    glDrawElements(GL_TRIANGLES, vertex_array_->index_buffer()->count(), GL_UNSIGNED_INT, nullptr);
 
     for (auto& layer : layer_stack_) {
       layer->on_update();
