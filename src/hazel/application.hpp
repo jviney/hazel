@@ -3,6 +3,7 @@
 #include "hazel/events/application_event.hpp"
 #include "hazel/imgui/imgui_layer.hpp"
 #include "hazel/layer_stack.hpp"
+#include "hazel/renderer/shader.hpp"
 #include "hazel/window.hpp"
 
 namespace hazel
@@ -32,6 +33,7 @@ private:
   LayerStack layer_stack_;
 
   unsigned int vertex_array_, vertex_buffer_, index_buffer_;
+  std::unique_ptr<Shader> shader_;
 
   static Application* instance_;
 };

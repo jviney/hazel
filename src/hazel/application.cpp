@@ -25,9 +25,6 @@ Application::Application() {
   push_overlay(std::move(imgui_layer));
 
   // Triangle
-  //
-  // No triangle visible because it appears that this OpenGL implementation
-  // (macOS 10.15, Intel Iris Graphics 550) does not have a default shader.
   glGenVertexArrays(1, &vertex_array_);
   glBindVertexArray(vertex_array_);
 
@@ -53,6 +50,33 @@ Application::Application() {
 
   unsigned int indices[3] = {0, 1, 2};
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+  auto vertex_source = R"(
+    #version 330 core
+
+    layout(location = 0) in vec3 a_position;
+
+    out vec3 v_position;
+
+    void main() {
+      v_position = a_position;
+      gl_Position = vec4(a_position, 1.0);
+    }
+  )";
+
+  auto fragment_source = R"(
+    #version 330 core
+
+    layout(location = 0) out vec4 color;
+
+    in vec3 v_position;
+
+    void main() {
+      color = vec4(v_position * 0.5 + 0.5, 1.0);
+    }
+  )";
+
+  shader_ = std::make_unique<Shader>(vertex_source, fragment_source);
 }
 
 Application::~Application() {}
@@ -86,6 +110,7 @@ void Application::run() {
     glClearColor(0.2f, 0.2f, 0.2f, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    shader_->bind();
     glBindVertexArray(vertex_array_);
     glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
