@@ -4,6 +4,7 @@
 #include "hazel/imgui/imgui_layer.hpp"
 #include "hazel/layer_stack.hpp"
 #include "hazel/renderer/buffer.hpp"
+#include "hazel/renderer/orthographic_camera.hpp"
 #include "hazel/renderer/shader.hpp"
 #include "hazel/renderer/vertex_array.hpp"
 #include "hazel/window.hpp"
@@ -39,6 +40,8 @@ private:
 
   std::shared_ptr<VertexArray> square_va_;
   std::shared_ptr<Shader> blue_shader_;
+
+  OrthographicCamera camera_;
 
   static Application* instance_;
 };

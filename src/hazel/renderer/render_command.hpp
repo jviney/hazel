@@ -15,7 +15,7 @@ public:
 
   inline static void clear() { renderer_api_->clear(); }
 
-  inline static void draw_indexed(VertexArray* vertex_array) {
+  inline static void draw_indexed(const VertexArray* vertex_array) {
     renderer_api_->draw_indexed(vertex_array);
   }
 
