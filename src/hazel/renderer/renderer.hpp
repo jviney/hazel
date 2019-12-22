@@ -1,17 +1,21 @@
 #pragma once
 
+#include "hazel/renderer/render_command.hpp"
+#include "hazel/renderer/renderer_api.hpp"
+#include "hazel/renderer/vertex_array.hpp"
+
 namespace hazel
 {
-
-enum class RendererAPI { None = 0, OpenGL = 1 };
 
 class Renderer
 {
 public:
-  static inline RendererAPI api() { return renderer_api_; }
+  static void begin_scene();
+  static void end_scene();
 
-private:
-  static RendererAPI renderer_api_;
+  static void submit(VertexArray*);
+
+  static inline RendererAPI::API api() { return RendererAPI::api(); }
 };
 
 } // namespace hazel

@@ -8,11 +8,11 @@ namespace hazel
 
 std::unique_ptr<VertexArray> VertexArray::create() {
   switch (Renderer::api()) {
-  case RendererAPI::None:
+  case RendererAPI::API::None:
     HZ_CORE_ASSERT(false, "RendererAPI::None not supported");
     return nullptr;
 
-  case RendererAPI::OpenGL:
+  case RendererAPI::API::OpenGL:
     return std::make_unique<OpenGLVertexArray>();
   }
 

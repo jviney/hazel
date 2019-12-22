@@ -3,8 +3,7 @@
 #include "hazel/application.hpp"
 #include "hazel/events/application_event.hpp"
 #include "hazel/input.hpp"
-
-#include <glad/glad.h>
+#include "hazel/renderer/renderer.hpp"
 
 namespace hazel
 {
@@ -158,16 +157,18 @@ void Application::on_event(Event& event) {
 
 void Application::run() {
   while (running_) {
-    glClearColor(0.2f, 0.2f, 0.2f, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    RenderCommand::set_clear_color({0.25, 0.2f, 0.2f, 1.0f});
+    RenderCommand::clear();
+
+    Renderer::begin_scene();
 
     blue_shader_->bind();
-    square_va_->bind();
-    glDrawElements(GL_TRIANGLES, square_va_->index_buffer()->count(), GL_UNSIGNED_INT, nullptr);
+    Renderer::submit(square_va_.get());
 
     shader_->bind();
-    vertex_array_->bind();
-    glDrawElements(GL_TRIANGLES, vertex_array_->index_buffer()->count(), GL_UNSIGNED_INT, nullptr);
+    Renderer::submit(vertex_array_.get());
+
+    Renderer::end_scene();
 
     for (auto& layer : layer_stack_) {
       layer->on_update();

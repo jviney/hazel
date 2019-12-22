@@ -8,11 +8,11 @@ namespace hazel
 
 std::unique_ptr<VertexBuffer> VertexBuffer::create(float* vertices, uint32_t size) {
   switch (Renderer::api()) {
-  case RendererAPI::None:
+  case RendererAPI::API::None:
     HZ_CORE_ASSERT(false, "RendererAPI::None not supported");
     return nullptr;
 
-  case RendererAPI::OpenGL:
+  case RendererAPI::API::OpenGL:
     return std::make_unique<OpenGLVertexBuffer>(vertices, size);
   }
 
@@ -22,11 +22,11 @@ std::unique_ptr<VertexBuffer> VertexBuffer::create(float* vertices, uint32_t siz
 
 std::unique_ptr<IndexBuffer> IndexBuffer::create(uint32_t* vertices, uint32_t size) {
   switch (Renderer::api()) {
-  case RendererAPI::None:
+  case RendererAPI::API::None:
     HZ_CORE_ASSERT(false, "RendererAPI::None not supported");
     return nullptr;
 
-  case RendererAPI::OpenGL:
+  case RendererAPI::API::OpenGL:
     return std::make_unique<OpenGLIndexBuffer>(vertices, size);
   }
 
