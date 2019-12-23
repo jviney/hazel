@@ -20,6 +20,8 @@ Application::Application() {
   window_ = Window::create();
   window_->set_event_callback(BIND_EVENT_FN(on_event));
 
+  Renderer::init();
+
   auto imgui_layer = std::make_unique<ImGuiLayer>();
   imgui_layer_ = imgui_layer.get();
   push_overlay(std::move(imgui_layer));

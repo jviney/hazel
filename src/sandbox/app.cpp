@@ -163,6 +163,8 @@ public:
         hazel::Shader::create(texture_shader_vertex_source, texture_shader_fragment_source);
 
     texture_ = hazel::Texture2D::create("../src/sandbox/assets/textures/checkerboard.png");
+    cherno_logo_texture_ =
+        hazel::Texture2D::create("../src/sandbox/assets/textures/cherno_logo.png");
 
     std::dynamic_pointer_cast<hazel::OpenGLShader>(texture_shader_)->bind();
     std::dynamic_pointer_cast<hazel::OpenGLShader>(texture_shader_)
@@ -215,6 +217,10 @@ public:
     hazel::Renderer::submit(texture_shader_.get(), square_va_.get(),
                             glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
+    cherno_logo_texture_->bind();
+    hazel::Renderer::submit(texture_shader_.get(), square_va_.get(),
+                            glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
     // Triangle
     // hazel::Renderer::submit(shader_.get(), vertex_array_.get());
 
@@ -248,6 +254,7 @@ private:
   glm::vec3 square_color_{0.2f, 0.3f, 0.8f};
 
   hazel::Ref<hazel::Texture2D> texture_;
+  hazel::Ref<hazel::Texture2D> cherno_logo_texture_;
 };
 
 class Sandbox : public hazel::Application
