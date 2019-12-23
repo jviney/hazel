@@ -4,6 +4,7 @@
 #include <memory>
 #include <utility>
 
+#include <array>
 #include <sstream>
 #include <string>
 #include <unordered_map>

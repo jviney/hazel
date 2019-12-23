@@ -12,11 +12,14 @@ class OpenGLShader : public Shader
 {
 public:
   OpenGLShader(const std::string& filepath);
-  OpenGLShader(const std::string& vertex_source, const std::string& fragment_source);
+  OpenGLShader(const std::string& name, const std::string& vertex_source,
+               const std::string& fragment_source);
   ~OpenGLShader();
 
   void bind() const override;
   void unbind() const override;
+
+  const std::string& name() const override;
 
   void upload_uniform_int(const std::string& name, int) const;
 
@@ -33,7 +36,8 @@ private:
   void compile(const std::unordered_map<GLenum, std::string>& shader_sources);
   std::string read_file(const std::string& filepath);
 
-  uint32_t renderer_id_;
+  uint32_t renderer_id_{};
+  std::string name_;
 };
 
 } // namespace hazel

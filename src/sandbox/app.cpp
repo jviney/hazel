@@ -93,7 +93,7 @@ public:
       }
     )";
 
-    shader_ = hazel::Shader::create(vertex_source, fragment_source);
+    shader_ = hazel::Shader::create("vertex position color", vertex_source, fragment_source);
 
     auto flat_color_shader_vertex_source = R"(
       #version 330 core
@@ -125,16 +125,16 @@ public:
       }
     )";
 
-    flat_color_shader_ =
-        hazel::Shader::create(flat_color_shader_vertex_source, flat_color_shader_fragment_source);
+    flat_color_shader_ = hazel::Shader::create("flat color shader", flat_color_shader_vertex_source,
+                                               flat_color_shader_fragment_source);
 
-    texture_shader_ = hazel::Shader::create("../assets/shaders/texture.glsl");
+    auto texture_shader = shader_library_.load("../assets/shaders/texture.glsl");
 
     texture_ = hazel::Texture2D::create("../assets/textures/checkerboard.png");
     cherno_logo_texture_ = hazel::Texture2D::create("../assets/textures/cherno_logo.png");
 
-    std::dynamic_pointer_cast<hazel::OpenGLShader>(texture_shader_)->bind();
-    std::dynamic_pointer_cast<hazel::OpenGLShader>(texture_shader_)
+    std::dynamic_pointer_cast<hazel::OpenGLShader>(texture_shader)->bind();
+    std::dynamic_pointer_cast<hazel::OpenGLShader>(texture_shader)
         ->upload_uniform_int("u_texture", 0);
   }
 
@@ -180,12 +180,14 @@ public:
       }
     }
 
+    auto texture_shader = shader_library_.get("texture");
+
     texture_->bind();
-    hazel::Renderer::submit(texture_shader_.get(), square_va_.get(),
+    hazel::Renderer::submit(texture_shader.get(), square_va_.get(),
                             glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
     cherno_logo_texture_->bind();
-    hazel::Renderer::submit(texture_shader_.get(), square_va_.get(),
+    hazel::Renderer::submit(texture_shader.get(), square_va_.get(),
                             glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
     // Triangle
@@ -203,13 +205,13 @@ public:
   void on_event(hazel::Event& event) override {}
 
 private:
-  hazel::Ref<hazel::VertexArray> vertex_array_;
+  hazel::ShaderLibrary shader_library_;
+
   hazel::Ref<hazel::Shader> shader_;
+  hazel::Ref<hazel::VertexArray> vertex_array_;
 
   hazel::Ref<hazel::VertexArray> square_va_;
   hazel::Ref<hazel::Shader> flat_color_shader_;
-
-  hazel::Ref<hazel::Shader> texture_shader_;
 
   hazel::OrthographicCamera camera_;
   glm::vec3 camera_position_{0.0f};

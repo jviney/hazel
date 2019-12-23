@@ -1,4 +1,5 @@
 #include <fstream>
+#include <filesystem>
 
 #include "hazel/core.hpp"
 #include "hazel/log.hpp"
@@ -26,9 +27,13 @@ OpenGLShader::OpenGLShader(const std::string& filepath) {
   auto shader_sources = pre_process(source);
 
   compile(shader_sources);
+
+  name_ = std::filesystem::path(filepath).stem();
 }
 
-OpenGLShader::OpenGLShader(const std::string& vertex_source, const std::string& fragment_source) {
+OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertex_source,
+                           const std::string& fragment_source)
+    : name_(name) {
   auto sources = std::unordered_map<GLenum, std::string>();
 
   sources[GL_VERTEX_SHADER] = vertex_source;
@@ -40,8 +45,10 @@ OpenGLShader::OpenGLShader(const std::string& vertex_source, const std::string& 
 void OpenGLShader::compile(const std::unordered_map<GLenum, std::string>& sources) {
   GLuint program = glCreateProgram();
 
-  auto shader_ids = std::vector<GLenum>(sources.size());
+  HZ_CORE_ASSERT(sources.size() <= 2, "only 2 shader sources supported");
+  auto shader_ids = std::array<GLenum, 2>();
 
+  int shader_id_index = 0;
   for (auto const& [shader_type, source] : sources) {
     GLuint shader = glCreateShader(shader_type);
 
@@ -68,7 +75,7 @@ void OpenGLShader::compile(const std::unordered_map<GLenum, std::string>& source
 
     glAttachShader(program, shader);
 
-    shader_ids.push_back(shader);
+    shader_ids[shader_id_index++] = shader;
   }
 
   glLinkProgram(program);
@@ -150,6 +157,8 @@ std::unordered_map<GLenum, std::string> OpenGLShader::pre_process(const std::str
 void OpenGLShader::bind() const { glUseProgram(renderer_id_); }
 
 void OpenGLShader::unbind() const { glUseProgram(0); }
+
+const std::string& OpenGLShader::name() const { return name_; }
 
 void OpenGLShader::upload_uniform_int(const std::string& name, int value) const {
   const GLint location = glGetUniformLocation(renderer_id_, name.c_str());
