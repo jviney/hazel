@@ -15,7 +15,8 @@ public:
   static void begin_scene(OrthographicCamera&);
   static void end_scene();
 
-  static void submit(const Shader*, const VertexArray*);
+  static void submit(const Shader*, const VertexArray*,
+                     const glm::mat4& transform = glm::mat4(1.0f));
 
   static inline RendererAPI::API api() { return RendererAPI::api(); }
 

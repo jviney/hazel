@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <imgui.h>
+#include "glm/ext/matrix_transform.hpp"
 
 #include "hazel/events/event.hpp"
 #include "hazel/events/key_event.hpp"
@@ -40,10 +41,10 @@ public:
 
     // clang-format off
     float square_vertices[] = {
-      -0.75f, -0.75f, 0.0f,
-      0.75f, -0.75f, 0.0f,
-      0.75f,  0.75f, 0.0f,
-      -0.75f,  0.75f, 0.0f,
+      -0.5f, -0.5f, 0.0f,
+       0.5f, -0.5f, 0.0f,
+       0.5f,  0.5f, 0.0f,
+      -0.5f,  0.5f, 0.0f,
     };
     // clang-format on
 
@@ -64,6 +65,7 @@ public:
       layout(location = 1) in vec4 a_color;
 
       uniform mat4 u_view_projection;
+      uniform mat4 u_transform;
 
       out vec3 v_position;
       out vec4 v_color;
@@ -71,7 +73,7 @@ public:
       void main() {
         v_position = a_position;
         v_color = a_color;
-        gl_Position = u_view_projection * vec4(a_position, 1.0);
+        gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
       }
     )";
 
@@ -97,12 +99,13 @@ public:
       layout(location = 0) in vec3 a_position;
 
       uniform mat4 u_view_projection;
+      uniform mat4 u_transform;
 
       out vec3 v_position;
 
       void main() {
         v_position = a_position;
-        gl_Position = u_view_projection * vec4(a_position, 1.0);
+        gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
       }
     )";
 
@@ -149,7 +152,16 @@ public:
 
     hazel::Renderer::begin_scene(camera_);
 
-    hazel::Renderer::submit(blue_shader_.get(), square_va_.get());
+    auto scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+    for (int y = 0; y < 20; y++) {
+      for (int x = 0; x < 20; x++) {
+        auto position = glm::vec3(x * 0.11f, y * 0.11f, 0.0f);
+        auto transform = glm::translate(glm::mat4(1.0f), position) * scale;
+        hazel::Renderer::submit(blue_shader_.get(), square_va_.get(), transform);
+      }
+    }
+
     hazel::Renderer::submit(shader_.get(), vertex_array_.get());
 
     hazel::Renderer::end_scene();
