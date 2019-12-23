@@ -1,5 +1,6 @@
 #pragma once
 
+#include "hazel/core.hpp"
 #include "hazel/renderer/buffer.hpp"
 
 namespace hazel
@@ -13,13 +14,13 @@ public:
   virtual void bind() const = 0;
   virtual void unbind() const = 0;
 
-  virtual void add_vertex_buffer(std::shared_ptr<VertexBuffer>) = 0;
-  virtual void set_index_buffer(std::shared_ptr<IndexBuffer>) = 0;
+  virtual void add_vertex_buffer(Ref<VertexBuffer>) = 0;
+  virtual void set_index_buffer(Ref<IndexBuffer>) = 0;
 
-  virtual const std::vector<std::shared_ptr<VertexBuffer>>& vertex_buffers() const = 0;
-  virtual const std::shared_ptr<IndexBuffer>& index_buffer() const = 0;
+  virtual const std::vector<Ref<VertexBuffer>>& vertex_buffers() const = 0;
+  virtual const Ref<IndexBuffer>& index_buffer() const = 0;
 
-  static std::unique_ptr<VertexArray> create();
+  static Scope<VertexArray> create();
 };
 
 } // namespace hazel

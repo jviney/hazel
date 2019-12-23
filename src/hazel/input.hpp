@@ -29,7 +29,7 @@ protected:
   virtual float mouse_y_impl() const = 0;
 
 private:
-  static std::unique_ptr<Input> instance_;
+  static Scope<Input> instance_;
 };
 
 } // namespace hazel

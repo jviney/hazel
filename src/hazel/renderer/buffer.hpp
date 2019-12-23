@@ -138,7 +138,7 @@ public:
   virtual const BufferLayout& layout() const = 0;
   virtual void set_layout(const BufferLayout& layout) = 0;
 
-  static std::unique_ptr<VertexBuffer> create(float* vertices, uint32_t size);
+  static Scope<VertexBuffer> create(float* vertices, uint32_t size);
 };
 
 class IndexBuffer
@@ -151,7 +151,7 @@ public:
 
   virtual uint32_t count() const = 0;
 
-  static std::unique_ptr<IndexBuffer> create(uint32_t* vertices, uint32_t size);
+  static Scope<IndexBuffer> create(uint32_t* vertices, uint32_t size);
 };
 
 } // namespace hazel

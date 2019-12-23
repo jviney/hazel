@@ -19,7 +19,7 @@ public:
     };
     // clang-format on
 
-    std::shared_ptr<hazel::VertexBuffer> vertex_buffer =
+    hazel::Ref<hazel::VertexBuffer> vertex_buffer =
         hazel::VertexBuffer::create(vertices, sizeof(vertices));
 
     hazel::BufferLayout layout = {{hazel::ShaderDataType::Float3, "a_position"},
@@ -29,7 +29,7 @@ public:
 
     // Index buffer
     uint32_t indices[3] = {0, 1, 2};
-    std::shared_ptr<hazel::IndexBuffer> index_buffer =
+    hazel::Ref<hazel::IndexBuffer> index_buffer =
         hazel::IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t));
 
     vertex_array_ = hazel::VertexArray::create();
@@ -48,13 +48,13 @@ public:
     };
     // clang-format on
 
-    std::shared_ptr<hazel::VertexBuffer> square_vb =
+    hazel::Ref<hazel::VertexBuffer> square_vb =
         hazel::VertexBuffer::create(square_vertices, sizeof(square_vertices));
     square_vb->set_layout({{hazel::ShaderDataType::Float3, "a_position"}});
     square_va_->add_vertex_buffer(square_vb);
 
     uint32_t square_indices[] = {0, 1, 2, 2, 3, 0};
-    std::shared_ptr<hazel::IndexBuffer> square_ib =
+    hazel::Ref<hazel::IndexBuffer> square_ib =
         hazel::IndexBuffer::create(square_indices, sizeof(square_indices) / sizeof(uint32_t));
     square_va_->set_index_buffer(square_ib);
 
@@ -183,11 +183,11 @@ public:
   void on_event(hazel::Event& event) override {}
 
 private:
-  std::shared_ptr<hazel::VertexArray> vertex_array_;
-  std::shared_ptr<hazel::Shader> shader_;
+  hazel::Ref<hazel::VertexArray> vertex_array_;
+  hazel::Ref<hazel::Shader> shader_;
 
-  std::shared_ptr<hazel::VertexArray> square_va_;
-  std::shared_ptr<hazel::Shader> flat_color_shader_;
+  hazel::Ref<hazel::VertexArray> square_va_;
+  hazel::Ref<hazel::Shader> flat_color_shader_;
 
   hazel::OrthographicCamera camera_;
   glm::vec3 camera_position_{0.0f};
@@ -209,6 +209,4 @@ public:
   // void run() override {}
 };
 
-std::unique_ptr<hazel::Application> hazel::create_application() {
-  return std::make_unique<Sandbox>();
-}
+hazel::Scope<hazel::Application> hazel::create_application() { return std::make_unique<Sandbox>(); }

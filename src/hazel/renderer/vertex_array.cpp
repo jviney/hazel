@@ -6,7 +6,7 @@
 namespace hazel
 {
 
-std::unique_ptr<VertexArray> VertexArray::create() {
+Scope<VertexArray> VertexArray::create() {
   switch (Renderer::api()) {
   case RendererAPI::API::None:
     HZ_CORE_ASSERT(false, "RendererAPI::None not supported");

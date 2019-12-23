@@ -42,7 +42,7 @@ void OpenGLVertexArray::bind() const { glBindVertexArray(renderer_id_); }
 
 void OpenGLVertexArray::unbind() const { glBindVertexArray(0); }
 
-void OpenGLVertexArray::add_vertex_buffer(std::shared_ptr<VertexBuffer> vertex_buffer) {
+void OpenGLVertexArray::add_vertex_buffer(Ref<VertexBuffer> vertex_buffer) {
   HZ_CORE_ASSERT(vertex_buffer->layout().elements().size(), "vertex buffer has no layout");
 
   glBindVertexArray(renderer_id_);
@@ -62,7 +62,7 @@ void OpenGLVertexArray::add_vertex_buffer(std::shared_ptr<VertexBuffer> vertex_b
   vertex_buffers_.push_back(std::move(vertex_buffer));
 }
 
-void OpenGLVertexArray::set_index_buffer(std::shared_ptr<IndexBuffer> index_buffer) {
+void OpenGLVertexArray::set_index_buffer(Ref<IndexBuffer> index_buffer) {
   glBindVertexArray(renderer_id_);
   index_buffer->bind();
 

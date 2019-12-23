@@ -36,7 +36,7 @@ private:
 
   GLFWwindow* window_;
 
-  std::unique_ptr<GraphicsContext> context_;
+  Scope<GraphicsContext> context_;
 
   struct WindowData {
     std::string title;

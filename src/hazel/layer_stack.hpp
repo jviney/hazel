@@ -10,16 +10,16 @@ public:
   LayerStack();
   ~LayerStack();
 
-  void push_layer(std::unique_ptr<Layer> layer);
-  void push_overlay(std::unique_ptr<Layer> overlay);
-  void pop_layer(std::unique_ptr<Layer> layer);
-  void pop_overlay(std::unique_ptr<Layer> overlay);
+  void push_layer(Scope<Layer> layer);
+  void push_overlay(Scope<Layer> overlay);
+  void pop_layer(Scope<Layer> layer);
+  void pop_overlay(Scope<Layer> overlay);
 
   auto begin() { return layers_.begin(); }
   auto end() { return layers_.end(); }
 
 private:
-  std::vector<std::unique_ptr<Layer>> layers_;
+  std::vector<Scope<Layer>> layers_;
   unsigned int layer_insert_index_ = 0;
 };
 

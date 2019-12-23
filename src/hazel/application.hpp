@@ -22,15 +22,15 @@ public:
 
   inline static auto& get() { return *instance_; }
 
-  void push_layer(std::unique_ptr<Layer> layer);
-  void push_overlay(std::unique_ptr<Layer> layer);
+  void push_layer(Scope<Layer> layer);
+  void push_overlay(Scope<Layer> layer);
 
   inline auto& window() { return *window_; }
 
 private:
   virtual bool on_window_close(WindowCloseEvent& e);
 
-  std::unique_ptr<Window> window_;
+  Scope<Window> window_;
   ImGuiLayer* imgui_layer_;
   bool running_ = true;
   LayerStack layer_stack_;
@@ -41,6 +41,6 @@ private:
   static Application* instance_;
 };
 
-extern std::unique_ptr<Application> create_application();
+extern Scope<Application> create_application();
 
 } // namespace hazel

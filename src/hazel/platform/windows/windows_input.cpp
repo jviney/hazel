@@ -7,7 +7,7 @@
 namespace hazel
 {
 
-std::unique_ptr<Input> Input::instance_ = std::make_unique<WindowsInput>();
+Scope<Input> Input::instance_ = std::make_unique<WindowsInput>();
 
 bool WindowsInput::is_key_pressed_impl(int key_code) const {
   auto* window = static_cast<GLFWwindow*>(Application::get().window().native_window());

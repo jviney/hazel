@@ -27,12 +27,12 @@ Application::Application() {
 
 Application::~Application() {}
 
-void Application::push_layer(std::unique_ptr<Layer> layer) {
+void Application::push_layer(Scope<Layer> layer) {
   layer->on_attach();
   layer_stack_.push_layer(std::move(layer));
 }
 
-void Application::push_overlay(std::unique_ptr<Layer> layer) {
+void Application::push_overlay(Scope<Layer> layer) {
   layer->on_attach();
   layer_stack_.push_overlay(std::move(layer));
 }

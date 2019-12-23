@@ -6,7 +6,7 @@
 namespace hazel
 {
 
-std::unique_ptr<VertexBuffer> VertexBuffer::create(float* vertices, uint32_t size) {
+Scope<VertexBuffer> VertexBuffer::create(float* vertices, uint32_t size) {
   switch (Renderer::api()) {
   case RendererAPI::API::None:
     HZ_CORE_ASSERT(false, "RendererAPI::None not supported");
@@ -20,7 +20,7 @@ std::unique_ptr<VertexBuffer> VertexBuffer::create(float* vertices, uint32_t siz
   return nullptr;
 }
 
-std::unique_ptr<IndexBuffer> IndexBuffer::create(uint32_t* vertices, uint32_t size) {
+Scope<IndexBuffer> IndexBuffer::create(uint32_t* vertices, uint32_t size) {
   switch (Renderer::api()) {
   case RendererAPI::API::None:
     HZ_CORE_ASSERT(false, "RendererAPI::None not supported");

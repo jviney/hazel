@@ -1,7 +1,6 @@
 #pragma once
 
-#include <string>
-#include <memory>
+#include "hazel/core.hpp"
 
 namespace hazel
 {
@@ -14,8 +13,7 @@ public:
   virtual void bind() const = 0;
   virtual void unbind() const = 0;
 
-  static std::unique_ptr<Shader> create(const std::string& vertex_source,
-                                        const std::string& fragment_source);
+  static Scope<Shader> create(const std::string& vertex_source, const std::string& fragment_source);
 };
 
 } // namespace hazel

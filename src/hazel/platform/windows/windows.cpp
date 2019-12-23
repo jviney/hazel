@@ -18,7 +18,7 @@ namespace hazel
 
 static bool is_glfw_initialized = false;
 
-std::unique_ptr<Window> Window::create(const WindowProps& props) {
+Scope<Window> Window::create(const WindowProps& props) {
   return std::make_unique<WindowsWindow>(props);
 }
 

@@ -38,7 +38,7 @@ public:
 
   virtual void* native_window() const = 0;
 
-  static std::unique_ptr<Window> create(const WindowProps& props = WindowProps());
+  static Scope<Window> create(const WindowProps& props = WindowProps());
 };
 
 } // namespace hazel

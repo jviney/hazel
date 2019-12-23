@@ -10,8 +10,7 @@
 namespace hazel
 {
 
-std::unique_ptr<Shader> Shader::create(const std::string& vertex_source,
-                                       const std::string& fragment_source) {
+Scope<Shader> Shader::create(const std::string& vertex_source, const std::string& fragment_source) {
   switch (Renderer::api()) {
   case RendererAPI::API::None:
     HZ_CORE_ASSERT(false, "RendererAPI::None not supported");
