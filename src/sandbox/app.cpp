@@ -128,43 +128,10 @@ public:
     flat_color_shader_ =
         hazel::Shader::create(flat_color_shader_vertex_source, flat_color_shader_fragment_source);
 
-    auto texture_shader_vertex_source = R"(
-      #version 330 core
+    texture_shader_ = hazel::Shader::create("../assets/shaders/texture.glsl");
 
-      layout(location = 0) in vec3 a_position;
-      layout(location = 1) in vec2 a_tex_coord;
-
-      uniform mat4 u_view_projection;
-      uniform mat4 u_transform;
-
-      out vec2 v_tex_coord;
-
-      void main() {
-        v_tex_coord = a_tex_coord;
-        gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
-      }
-    )";
-
-    auto texture_shader_fragment_source = R"(
-      #version 330 core
-
-      layout(location = 0) out vec4 color;
-
-      in vec2 v_tex_coord;
-
-      uniform sampler2D u_texture;
-
-      void main() {
-        color = texture(u_texture, v_tex_coord);
-      }
-    )";
-
-    texture_shader_ =
-        hazel::Shader::create(texture_shader_vertex_source, texture_shader_fragment_source);
-
-    texture_ = hazel::Texture2D::create("../src/sandbox/assets/textures/checkerboard.png");
-    cherno_logo_texture_ =
-        hazel::Texture2D::create("../src/sandbox/assets/textures/cherno_logo.png");
+    texture_ = hazel::Texture2D::create("../assets/textures/checkerboard.png");
+    cherno_logo_texture_ = hazel::Texture2D::create("../assets/textures/cherno_logo.png");
 
     std::dynamic_pointer_cast<hazel::OpenGLShader>(texture_shader_)->bind();
     std::dynamic_pointer_cast<hazel::OpenGLShader>(texture_shader_)

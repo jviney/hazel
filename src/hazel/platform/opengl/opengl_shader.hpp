@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 
 #include "hazel/renderer/shader.hpp"
@@ -10,6 +11,7 @@ namespace hazel
 class OpenGLShader : public Shader
 {
 public:
+  OpenGLShader(const std::string& filepath);
   OpenGLShader(const std::string& vertex_source, const std::string& fragment_source);
   ~OpenGLShader();
 
@@ -27,6 +29,10 @@ public:
   void upload_uniform_mat4(const std::string& name, const glm::mat4&) const;
 
 private:
+  std::unordered_map<GLenum, std::string> pre_process(const std::string& source);
+  void compile(const std::unordered_map<GLenum, std::string>& shader_sources);
+  std::string read_file(const std::string& filepath);
+
   uint32_t renderer_id_;
 };
 

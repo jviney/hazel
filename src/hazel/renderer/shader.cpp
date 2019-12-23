@@ -10,6 +10,20 @@
 namespace hazel
 {
 
+Scope<Shader> Shader::create(const std::string& filepath) {
+  switch (Renderer::api()) {
+  case RendererAPI::API::None:
+    HZ_CORE_ASSERT(false, "RendererAPI::None not supported");
+    return nullptr;
+
+  case RendererAPI::API::OpenGL:
+    return std::make_unique<OpenGLShader>(filepath);
+  }
+
+  HZ_CORE_ASSERT(false, "unknown RendererAPI");
+  return nullptr;
+}
+
 Scope<Shader> Shader::create(const std::string& vertex_source, const std::string& fragment_source) {
   switch (Renderer::api()) {
   case RendererAPI::API::None:
