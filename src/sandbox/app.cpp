@@ -2,9 +2,9 @@
 
 #include <imgui.h>
 #include "glm/ext/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
-#include "hazel/events/event.hpp"
-#include "hazel/events/key_event.hpp"
+#include "hazel/platform/opengl/opengl_shader.hpp"
 #include "hazel/hazel.hpp"
 
 class ExampleLayer : public hazel::Layer
@@ -91,7 +91,7 @@ public:
       }
     )";
 
-    shader_ = std::make_unique<hazel::Shader>(vertex_source, fragment_source);
+    shader_ = hazel::Shader::create(vertex_source, fragment_source);
 
     auto flat_color_shader_vertex_source = R"(
       #version 330 core
@@ -116,15 +116,15 @@ public:
 
       in vec3 v_position;
 
-      uniform vec4 u_color;
+      uniform vec3 u_color;
 
       void main() {
-        color = u_color;
+        color = vec4(u_color, 1.0);
       }
     )";
 
-    flat_color_shader_ = std::make_unique<hazel::Shader>(flat_color_shader_vertex_source,
-                                                         flat_color_shader_fragment_source);
+    flat_color_shader_ =
+        hazel::Shader::create(flat_color_shader_vertex_source, flat_color_shader_fragment_source);
   }
 
   void on_update(hazel::Timestep ts) override {
@@ -156,19 +156,14 @@ public:
 
     auto scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-    auto blue_color = glm::vec4(0.2f, 0.3f, 0.8f, 1.0f);
-    auto red_color = glm::vec4(0.8f, 0.2f, 0.3f, 1.0f);
+    std::dynamic_pointer_cast<hazel::OpenGLShader>(flat_color_shader_)->bind();
+    std::dynamic_pointer_cast<hazel::OpenGLShader>(flat_color_shader_)
+        ->upload_uniform_float3("u_color", square_color_);
 
     for (int y = 0; y < 20; y++) {
       for (int x = 0; x < 20; x++) {
         auto position = glm::vec3(x * 0.11f, y * 0.11f, 0.0f);
         auto transform = glm::translate(glm::mat4(1.0f), position) * scale;
-
-        if (x % 2 == 0) {
-          flat_color_shader_->upload_uniform_float4("u_color", red_color);
-        } else {
-          flat_color_shader_->upload_uniform_float4("u_color", blue_color);
-        }
 
         hazel::Renderer::submit(flat_color_shader_.get(), square_va_.get(), transform);
       }
@@ -179,7 +174,11 @@ public:
     hazel::Renderer::end_scene();
   }
 
-  void on_imgui_render() override {}
+  void on_imgui_render() override {
+    ImGui::Begin("Settings");
+    ImGui::ColorEdit3("Square color", glm::value_ptr(square_color_));
+    ImGui::End();
+  }
 
   void on_event(hazel::Event& event) override {}
 
@@ -196,6 +195,8 @@ private:
 
   float camera_rotation_ = 0.0f;
   float camera_rotation_speed_ = 180.0f;
+
+  glm::vec3 square_color_{0.2f, 0.3f, 0.8f};
 };
 
 class Sandbox : public hazel::Application
