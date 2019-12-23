@@ -1,5 +1,6 @@
-#include "hazel/log.hpp"
 #include "hazel/core.hpp"
+#include "hazel/log.hpp"
+#include "hazel/core/timestep.hpp"
 #include "hazel/application.hpp"
 #include "hazel/events/application_event.hpp"
 #include "hazel/input.hpp"
@@ -52,8 +53,12 @@ void Application::on_event(Event& event) {
 
 void Application::run() {
   while (running_) {
+    auto time = std::chrono::steady_clock::now();
+    auto diff = std::chrono::duration<float>(time - last_frame_time_).count();
+    auto timestep = Timestep(diff);
+
     for (auto& layer : layer_stack_) {
-      layer->on_update();
+      layer->on_update(timestep);
     }
 
     imgui_layer_->begin();
@@ -63,6 +68,8 @@ void Application::run() {
     imgui_layer_->end();
 
     window_->on_update();
+
+    last_frame_time_ = time;
   }
 }
 

@@ -6,6 +6,8 @@
 #include "hazel/layer.hpp"
 #include "hazel/log.hpp"
 
+#include "hazel/core/timestep.hpp"
+
 #include "hazel/input.hpp"
 #include "hazel/events/key_codes.hpp"
 #include "hazel/events/mouse_button_codes.hpp"

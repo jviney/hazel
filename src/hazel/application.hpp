@@ -1,5 +1,8 @@
 #pragma once
 
+#include <chrono>
+
+#include "hazel/core/timestep.hpp"
 #include "hazel/events/application_event.hpp"
 #include "hazel/imgui/imgui_layer.hpp"
 #include "hazel/layer_stack.hpp"
@@ -26,10 +29,14 @@ public:
 
 private:
   virtual bool on_window_close(WindowCloseEvent& e);
+
   std::unique_ptr<Window> window_;
   ImGuiLayer* imgui_layer_;
   bool running_ = true;
   LayerStack layer_stack_;
+  Timestep timestep_;
+  std::chrono::time_point<std::chrono::steady_clock> last_frame_time_ =
+      std::chrono::steady_clock::now();
 
   static Application* instance_;
 };

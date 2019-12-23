@@ -122,23 +122,23 @@ public:
         std::make_unique<hazel::Shader>(blue_shader_vertex_source, blue_shader_fragment_source);
   }
 
-  void on_update() override {
+  void on_update(hazel::Timestep ts) override {
     if (hazel::Input::is_key_pressed(HZ_KEY_LEFT)) {
-      camera_position_.x += camera_speed_;
+      camera_position_.x += camera_speed_ * ts;
     } else if (hazel::Input::is_key_pressed(HZ_KEY_RIGHT)) {
-      camera_position_.x -= camera_speed_;
+      camera_position_.x -= camera_speed_ * ts;
     }
 
     if (hazel::Input::is_key_pressed(HZ_KEY_UP)) {
-      camera_position_.y -= camera_speed_;
+      camera_position_.y -= camera_speed_ * ts;
     } else if (hazel::Input::is_key_pressed(HZ_KEY_DOWN)) {
-      camera_position_.y += camera_speed_;
+      camera_position_.y += camera_speed_ * ts;
     }
 
     if (hazel::Input::is_key_pressed(HZ_KEY_A)) {
-      camera_rotation_ += camera_rotation_speed_;
+      camera_rotation_ += camera_rotation_speed_ * ts;
     } else if (hazel::Input::is_key_pressed(HZ_KEY_D)) {
-      camera_rotation_ -= camera_rotation_speed_;
+      camera_rotation_ -= camera_rotation_speed_ * ts;
     }
 
     hazel::RenderCommand::set_clear_color({0.25, 0.2f, 0.2f, 1.0f});
@@ -168,10 +168,10 @@ private:
 
   hazel::OrthographicCamera camera_;
   glm::vec3 camera_position_{0.0f};
-  float camera_speed_ = 0.1f;
+  float camera_speed_ = 5.0f;
 
   float camera_rotation_ = 0.0f;
-  float camera_rotation_speed_ = 1.0f;
+  float camera_rotation_speed_ = 180.0f;
 };
 
 class Sandbox : public hazel::Application

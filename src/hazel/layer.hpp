@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hazel/core.hpp"
+#include "hazel/core/timestep.hpp"
 #include "hazel/events/event.hpp"
 
 namespace hazel
@@ -13,7 +14,7 @@ public:
 
   virtual void on_attach() {}
   virtual void on_detach() {}
-  virtual void on_update() {}
+  virtual void on_update(Timestep) {}
   virtual void on_event(Event& /*event */) {}
   virtual void on_imgui_render() {}
 
