@@ -4,3 +4,4 @@
 -Ivendor/glm
 -Ivendor/imgui
 -Ivendor/spdlog/include
+-Ivendor/stb

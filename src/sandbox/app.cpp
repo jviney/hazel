@@ -6,6 +6,7 @@
 
 #include "hazel/platform/opengl/opengl_shader.hpp"
 #include "hazel/hazel.hpp"
+#include "hazel/renderer/texture.hpp"
 
 class ExampleLayer : public hazel::Layer
 {
@@ -41,16 +42,17 @@ public:
 
     // clang-format off
     float square_vertices[] = {
-      -0.5f, -0.5f, 0.0f,
-       0.5f, -0.5f, 0.0f,
-       0.5f,  0.5f, 0.0f,
-      -0.5f,  0.5f, 0.0f,
+      -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+       0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+       0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+      -0.5f,  0.5f, 0.0f, 0.0f, 1.0f
     };
     // clang-format on
 
     hazel::Ref<hazel::VertexBuffer> square_vb =
         hazel::VertexBuffer::create(square_vertices, sizeof(square_vertices));
-    square_vb->set_layout({{hazel::ShaderDataType::Float3, "a_position"}});
+    square_vb->set_layout({{hazel::ShaderDataType::Float3, "a_position"},
+                           {hazel::ShaderDataType::Float2, "a_tex_coord"}});
     square_va_->add_vertex_buffer(square_vb);
 
     uint32_t square_indices[] = {0, 1, 2, 2, 3, 0};
@@ -125,6 +127,46 @@ public:
 
     flat_color_shader_ =
         hazel::Shader::create(flat_color_shader_vertex_source, flat_color_shader_fragment_source);
+
+    auto texture_shader_vertex_source = R"(
+      #version 330 core
+
+      layout(location = 0) in vec3 a_position;
+      layout(location = 1) in vec2 a_tex_coord;
+
+      uniform mat4 u_view_projection;
+      uniform mat4 u_transform;
+
+      out vec2 v_tex_coord;
+
+      void main() {
+        v_tex_coord = a_tex_coord;
+        gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
+      }
+    )";
+
+    auto texture_shader_fragment_source = R"(
+      #version 330 core
+
+      layout(location = 0) out vec4 color;
+
+      in vec2 v_tex_coord;
+
+      uniform sampler2D u_texture;
+
+      void main() {
+        color = texture(u_texture, v_tex_coord);
+      }
+    )";
+
+    texture_shader_ =
+        hazel::Shader::create(texture_shader_vertex_source, texture_shader_fragment_source);
+
+    texture_ = hazel::Texture2D::create("../src/sandbox/assets/textures/checkerboard.png");
+
+    std::dynamic_pointer_cast<hazel::OpenGLShader>(texture_shader_)->bind();
+    std::dynamic_pointer_cast<hazel::OpenGLShader>(texture_shader_)
+        ->upload_uniform_int("u_texture", 0);
   }
 
   void on_update(hazel::Timestep ts) override {
@@ -169,7 +211,12 @@ public:
       }
     }
 
-    hazel::Renderer::submit(shader_.get(), vertex_array_.get());
+    texture_->bind();
+    hazel::Renderer::submit(texture_shader_.get(), square_va_.get(),
+                            glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+    // Triangle
+    // hazel::Renderer::submit(shader_.get(), vertex_array_.get());
 
     hazel::Renderer::end_scene();
   }
@@ -189,6 +236,8 @@ private:
   hazel::Ref<hazel::VertexArray> square_va_;
   hazel::Ref<hazel::Shader> flat_color_shader_;
 
+  hazel::Ref<hazel::Shader> texture_shader_;
+
   hazel::OrthographicCamera camera_;
   glm::vec3 camera_position_{0.0f};
   float camera_speed_ = 5.0f;
@@ -197,6 +246,8 @@ private:
   float camera_rotation_speed_ = 180.0f;
 
   glm::vec3 square_color_{0.2f, 0.3f, 0.8f};
+
+  hazel::Ref<hazel::Texture2D> texture_;
 };
 
 class Sandbox : public hazel::Application

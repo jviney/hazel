@@ -25,7 +25,11 @@ endif()
 
 # Define the hazel static library
 file(GLOB_RECURSE hazel_sources RELATIVE ${PROJECT_SOURCE_DIR} src/hazel/*.cpp)
-add_library(hazel STATIC ${hazel_sources})
+add_library(hazel STATIC
+  ${hazel_sources}
+
+  vendor/stb_image/stb_image.cpp
+)
 
 target_compile_definitions(hazel PRIVATE HZ_PLATFORM_MAC)
 
@@ -41,6 +45,7 @@ target_include_directories(hazel PUBLIC
   "${PROJECT_SOURCE_DIR}/vendor/glm"
   "${PROJECT_SOURCE_DIR}/vendor/imgui"
   "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"
+  "${PROJECT_SOURCE_DIR}/vendor/stb"
 )
 
 # glfw (brew install glfw)

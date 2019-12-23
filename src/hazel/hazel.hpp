@@ -23,6 +23,7 @@
 
 #include "hazel/renderer/buffer.hpp"
 #include "hazel/renderer/shader.hpp"
+#include "hazel/renderer/texture.hpp"
 #include "hazel/renderer/vertex_array.hpp"
 
 #include "hazel/renderer/orthographic_camera.hpp"
