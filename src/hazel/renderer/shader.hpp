@@ -14,6 +14,7 @@ public:
   void bind() const;
   void unbind() const;
 
+  void upload_uniform_float4(const std::string& name, const glm::vec4&) const;
   void upload_uniform_mat4(const std::string& name, const glm::mat4&) const;
 
 private:

@@ -93,7 +93,7 @@ public:
 
     shader_ = std::make_unique<hazel::Shader>(vertex_source, fragment_source);
 
-    auto blue_shader_vertex_source = R"(
+    auto flat_color_shader_vertex_source = R"(
       #version 330 core
 
       layout(location = 0) in vec3 a_position;
@@ -109,33 +109,35 @@ public:
       }
     )";
 
-    auto blue_shader_fragment_source = R"(
+    auto flat_color_shader_fragment_source = R"(
       #version 330 core
 
       layout(location = 0) out vec4 color;
 
       in vec3 v_position;
 
+      uniform vec4 u_color;
+
       void main() {
-        color = vec4(0.2, 0.3, 0.8, 1.0);
+        color = u_color;
       }
     )";
 
-    blue_shader_ =
-        std::make_unique<hazel::Shader>(blue_shader_vertex_source, blue_shader_fragment_source);
+    flat_color_shader_ = std::make_unique<hazel::Shader>(flat_color_shader_vertex_source,
+                                                         flat_color_shader_fragment_source);
   }
 
   void on_update(hazel::Timestep ts) override {
     if (hazel::Input::is_key_pressed(HZ_KEY_LEFT)) {
-      camera_position_.x += camera_speed_ * ts;
-    } else if (hazel::Input::is_key_pressed(HZ_KEY_RIGHT)) {
       camera_position_.x -= camera_speed_ * ts;
+    } else if (hazel::Input::is_key_pressed(HZ_KEY_RIGHT)) {
+      camera_position_.x += camera_speed_ * ts;
     }
 
     if (hazel::Input::is_key_pressed(HZ_KEY_UP)) {
-      camera_position_.y -= camera_speed_ * ts;
-    } else if (hazel::Input::is_key_pressed(HZ_KEY_DOWN)) {
       camera_position_.y += camera_speed_ * ts;
+    } else if (hazel::Input::is_key_pressed(HZ_KEY_DOWN)) {
+      camera_position_.y -= camera_speed_ * ts;
     }
 
     if (hazel::Input::is_key_pressed(HZ_KEY_A)) {
@@ -154,11 +156,21 @@ public:
 
     auto scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
+    auto blue_color = glm::vec4(0.2f, 0.3f, 0.8f, 1.0f);
+    auto red_color = glm::vec4(0.8f, 0.2f, 0.3f, 1.0f);
+
     for (int y = 0; y < 20; y++) {
       for (int x = 0; x < 20; x++) {
         auto position = glm::vec3(x * 0.11f, y * 0.11f, 0.0f);
         auto transform = glm::translate(glm::mat4(1.0f), position) * scale;
-        hazel::Renderer::submit(blue_shader_.get(), square_va_.get(), transform);
+
+        if (x % 2 == 0) {
+          flat_color_shader_->upload_uniform_float4("u_color", red_color);
+        } else {
+          flat_color_shader_->upload_uniform_float4("u_color", blue_color);
+        }
+
+        hazel::Renderer::submit(flat_color_shader_.get(), square_va_.get(), transform);
       }
     }
 
@@ -176,7 +188,7 @@ private:
   std::shared_ptr<hazel::Shader> shader_;
 
   std::shared_ptr<hazel::VertexArray> square_va_;
-  std::shared_ptr<hazel::Shader> blue_shader_;
+  std::shared_ptr<hazel::Shader> flat_color_shader_;
 
   hazel::OrthographicCamera camera_;
   glm::vec3 camera_position_{0.0f};
