@@ -42,7 +42,6 @@ void WindowsWindow::init(const WindowProps& props) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     glfwSetErrorCallback(glfw_error_callback);
     is_glfw_initialized = true;
@@ -63,9 +62,17 @@ void WindowsWindow::init(const WindowProps& props) {
 
     data.width = width;
     data.height = height;
-    std::cout << "YES\n";
 
     auto event = WindowResizeEvent(width, height);
+    data.event_callback(event);
+  });
+
+  glfwSetWindowContentScaleCallback(window_, [](GLFWwindow* window, float x_scale, float y_scale) {
+    auto& data = *(WindowData*) glfwGetWindowUserPointer(window);
+    data.content_scale_x = x_scale;
+    data.content_scale_y = y_scale;
+
+    auto event = WindowResizeEvent(data.width, data.height);
     data.event_callback(event);
   });
 

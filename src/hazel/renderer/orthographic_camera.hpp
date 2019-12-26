@@ -10,6 +10,8 @@ class OrthographicCamera
 public:
   OrthographicCamera(float left, float right, float bottom, float top);
 
+  void set_projection(float left, float right, float bottom, float top);
+
   const auto& position() const { return position_; }
 
   void set_position(const glm::vec3& position) {
@@ -32,7 +34,7 @@ private:
   void recalculate_view_matrix();
 
   glm::mat4 projection_matrix_{};
-  glm::mat4 view_matrix_{};
+  glm::mat4 view_matrix_{1.0f};
   glm::mat4 view_projection_matrix_{};
 
   glm::vec3 position_{0.0f, 0.0f, 0.0f};

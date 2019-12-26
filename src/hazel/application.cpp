@@ -44,6 +44,7 @@ void Application::on_event(Event& event) {
 
   auto dispatcher = EventDispatcher(event);
   dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(on_window_close));
+  dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(on_window_resize));
 
   for (auto it = layer_stack_.end(); it != layer_stack_.begin();) {
     (*--it)->on_event(event);
@@ -59,8 +60,10 @@ void Application::run() {
     auto diff = std::chrono::duration<float>(time - last_frame_time_).count();
     auto timestep = Timestep(diff);
 
-    for (auto& layer : layer_stack_) {
-      layer->on_update(timestep);
+    if (!minimized_) {
+      for (auto& layer : layer_stack_) {
+        layer->on_update(timestep);
+      }
     }
 
     imgui_layer_->begin();
@@ -78,6 +81,17 @@ void Application::run() {
 bool Application::on_window_close(WindowCloseEvent&) {
   running_ = false;
   return true;
+}
+
+bool Application::on_window_resize(WindowResizeEvent& e) {
+  if (e.width() == 0 || e.height() == 0) {
+    minimized_ = true;
+    return false;
+  }
+
+  minimized_ = false;
+  Renderer::on_window_resize(e.width(), e.height());
+  return false;
 }
 
 } // namespace hazel

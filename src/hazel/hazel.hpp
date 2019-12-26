@@ -11,6 +11,7 @@
 #include "hazel/input.hpp"
 #include "hazel/events/key_codes.hpp"
 #include "hazel/events/mouse_button_codes.hpp"
+#include "hazel/orthographic_camera_controller.hpp"
 
 #include "hazel/imgui/imgui_layer.hpp"
 

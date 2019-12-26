@@ -1,4 +1,5 @@
 #include "hazel/core.hpp"
+#include "hazel/application.hpp"
 #include "hazel/platform/opengl/opengl_renderer_api.hpp"
 
 #include <glad/glad.h>
@@ -9,6 +10,11 @@ namespace hazel
 void OpenGLRendererAPI::init() {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void OpenGLRendererAPI::set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+  auto const& window = Application::get().window();
+  glViewport(x, y, width * window.content_scale_x(), height * window.content_scale_y());
 }
 
 void OpenGLRendererAPI::clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }

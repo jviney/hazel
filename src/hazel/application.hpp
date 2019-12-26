@@ -29,10 +29,12 @@ public:
 
 private:
   virtual bool on_window_close(WindowCloseEvent& e);
+  virtual bool on_window_resize(WindowResizeEvent& e);
 
   Scope<Window> window_;
   ImGuiLayer* imgui_layer_;
   bool running_ = true;
+  bool minimized_ = false;
   LayerStack layer_stack_;
   Timestep timestep_;
   std::chrono::time_point<std::chrono::steady_clock> last_frame_time_ =

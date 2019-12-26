@@ -1,9 +1,11 @@
 #include <iostream>
+#include <vector>
 
 #include <imgui.h>
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+#include "hazel/events/application_event.hpp"
 #include "hazel/platform/opengl/opengl_shader.hpp"
 #include "hazel/hazel.hpp"
 #include "hazel/renderer/texture.hpp"
@@ -11,7 +13,10 @@
 class ExampleLayer : public hazel::Layer
 {
 public:
-  ExampleLayer() : Layer("Example"), camera_(-1.6f, 1.6f, -0.9f, 0.9f) {
+  ExampleLayer() : Layer("Example"), camera_controller_(16.0f / 9.0f) {
+    auto a = std::vector<int>(1);
+    auto b = std::vector<int>{1, 2, 3};
+    std::vector<int> c{1, 2, 3};
     // clang-format off
     float vertices[] = {
       -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -139,31 +144,12 @@ public:
   }
 
   void on_update(hazel::Timestep ts) override {
-    if (hazel::Input::is_key_pressed(HZ_KEY_LEFT)) {
-      camera_position_.x -= camera_speed_ * ts;
-    } else if (hazel::Input::is_key_pressed(HZ_KEY_RIGHT)) {
-      camera_position_.x += camera_speed_ * ts;
-    }
-
-    if (hazel::Input::is_key_pressed(HZ_KEY_UP)) {
-      camera_position_.y += camera_speed_ * ts;
-    } else if (hazel::Input::is_key_pressed(HZ_KEY_DOWN)) {
-      camera_position_.y -= camera_speed_ * ts;
-    }
-
-    if (hazel::Input::is_key_pressed(HZ_KEY_A)) {
-      camera_rotation_ += camera_rotation_speed_ * ts;
-    } else if (hazel::Input::is_key_pressed(HZ_KEY_D)) {
-      camera_rotation_ -= camera_rotation_speed_ * ts;
-    }
+    camera_controller_.on_update(ts);
 
     hazel::RenderCommand::set_clear_color({0.25, 0.2f, 0.2f, 1.0f});
     hazel::RenderCommand::clear();
 
-    camera_.set_position(camera_position_);
-    camera_.set_rotation(camera_rotation_);
-
-    hazel::Renderer::begin_scene(camera_);
+    hazel::Renderer::begin_scene(camera_controller_.camera());
 
     auto scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -202,7 +188,7 @@ public:
     ImGui::End();
   }
 
-  void on_event(hazel::Event& event) override {}
+  void on_event(hazel::Event& event) override { camera_controller_.on_event(event); }
 
 private:
   hazel::ShaderLibrary shader_library_;
@@ -213,12 +199,7 @@ private:
   hazel::Ref<hazel::VertexArray> square_va_;
   hazel::Ref<hazel::Shader> flat_color_shader_;
 
-  hazel::OrthographicCamera camera_;
-  glm::vec3 camera_position_{0.0f};
-  float camera_speed_ = 5.0f;
-
-  float camera_rotation_ = 0.0f;
-  float camera_rotation_speed_ = 180.0f;
+  hazel::OrthographicCameraController camera_controller_;
 
   glm::vec3 square_color_{0.2f, 0.3f, 0.8f};
 
