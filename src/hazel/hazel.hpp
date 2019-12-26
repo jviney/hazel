@@ -20,6 +20,7 @@
 //
 
 #include "hazel/renderer/renderer.hpp"
+#include "hazel/renderer/renderer_2d.hpp"
 #include "hazel/renderer/render_command.hpp"
 
 #include "hazel/renderer/buffer.hpp"

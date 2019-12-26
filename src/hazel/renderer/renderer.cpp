@@ -1,6 +1,7 @@
 #include "hazel/core/core.hpp"
 #include "hazel/platform/opengl/opengl_shader.hpp"
 #include "hazel/renderer/renderer.hpp"
+#include "hazel/renderer/renderer_2d.hpp"
 #include "hazel/renderer/vertex_array.hpp"
 
 namespace hazel
@@ -8,7 +9,10 @@ namespace hazel
 
 Renderer::SceneData* Renderer::scene_data_ = new SceneData();
 
-void Renderer::init() { RenderCommand::init(); }
+void Renderer::init() {
+  RenderCommand::init();
+  Renderer2D::init();
+}
 
 void Renderer::on_window_resize(uint32_t width, uint32_t height) {
   RenderCommand::set_viewport(0, 0, width, height);
