@@ -1,4 +1,4 @@
-#include "hazel/core.hpp"
+#include "hazel/core/core.hpp"
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
 #include "examples/imgui_impl_glfw.cpp"

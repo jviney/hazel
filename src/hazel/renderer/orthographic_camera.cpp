@@ -1,4 +1,4 @@
-#include "hazel/core.hpp"
+#include "hazel/core/core.hpp"
 #include "hazel/renderer/orthographic_camera.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>

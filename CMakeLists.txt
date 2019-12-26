@@ -64,7 +64,7 @@ target_link_libraries(hazel PRIVATE imgui)
 # Precompiled header
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/vendor/cotire/CMake")
 include(cotire)
-set_target_properties(hazel PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT src/hazel/core.hpp)
+set_target_properties(hazel PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT src/hazel/core/core.hpp)
 set_target_properties(hazel PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
 cotire(hazel)
 

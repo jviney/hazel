@@ -1,7 +1,7 @@
-#include "hazel/core.hpp"
+#include "hazel/core/core.hpp"
+#include "hazel/core/input.hpp"
 #include "hazel/events/key_codes.hpp"
-#include "hazel/input.hpp"
-#include "hazel/orthographic_camera_controller.hpp"
+#include "hazel/renderer/orthographic_camera_controller.hpp"
 
 namespace hazel
 {

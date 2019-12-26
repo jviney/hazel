@@ -1,4 +1,4 @@
-#include "hazel/core.hpp"
+#include "hazel/core/core.hpp"
 #include "hazel/renderer/renderer_api.hpp"
 
 namespace hazel

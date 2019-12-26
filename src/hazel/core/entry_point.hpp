@@ -1,7 +1,7 @@
 #pragma once
 
-#include "hazel/application.hpp"
-#include "hazel/log.hpp"
+#include "hazel/core/application.hpp"
+#include "hazel/core/log.hpp"
 
 int main(int, char**) {
   hazel::Log::init();

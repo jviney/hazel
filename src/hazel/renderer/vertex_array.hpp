@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hazel/core.hpp"
+#include "hazel/core/core.hpp"
 #include "hazel/renderer/buffer.hpp"
 
 namespace hazel

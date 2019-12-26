@@ -1,4 +1,4 @@
-#include "hazel/core.hpp"
+#include "hazel/core/core.hpp"
 #include "hazel/platform/opengl/opengl_vertex_array.hpp"
 
 #include <glad/glad.h>

@@ -1,4 +1,4 @@
-#include "hazel/layer_stack.hpp"
+#include "hazel/core/layer_stack.hpp"
 
 namespace hazel
 {

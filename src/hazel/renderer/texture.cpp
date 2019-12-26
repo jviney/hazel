@@ -1,4 +1,4 @@
-#include "hazel/core.hpp"
+#include "hazel/core/core.hpp"
 #include "hazel/platform/opengl/opengl_texture.hpp"
 #include "hazel/renderer/renderer.hpp"
 #include "hazel/renderer/texture.hpp"

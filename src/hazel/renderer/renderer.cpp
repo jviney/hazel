@@ -1,7 +1,7 @@
-#include "hazel/core.hpp"
+#include "hazel/core/core.hpp"
+#include "hazel/platform/opengl/opengl_shader.hpp"
 #include "hazel/renderer/renderer.hpp"
 #include "hazel/renderer/vertex_array.hpp"
-#include "hazel/platform/opengl/opengl_shader.hpp"
 
 namespace hazel
 {

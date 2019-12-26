@@ -5,8 +5,8 @@
 #include "hazel/core/timestep.hpp"
 #include "hazel/events/application_event.hpp"
 #include "hazel/imgui/imgui_layer.hpp"
-#include "hazel/layer_stack.hpp"
-#include "hazel/window.hpp"
+#include "hazel/core/layer_stack.hpp"
+#include "hazel/core/window.hpp"
 
 namespace hazel
 {

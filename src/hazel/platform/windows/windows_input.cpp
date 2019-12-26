@@ -1,5 +1,5 @@
-#include "hazel/core.hpp"
-#include "hazel/application.hpp"
+#include "hazel/core/core.hpp"
+#include "hazel/core/application.hpp"
 #include "hazel/platform/windows/windows_input.hpp"
 
 #include <GLFW/glfw3.h>

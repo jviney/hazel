@@ -1,4 +1,4 @@
-#include "hazel/core.hpp"
+#include "hazel/core/core.hpp"
 #include "hazel/renderer/vertex_array.hpp"
 
 namespace hazel

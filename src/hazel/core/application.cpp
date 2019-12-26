@@ -1,9 +1,9 @@
-#include "hazel/core.hpp"
-#include "hazel/log.hpp"
+#include "hazel/core/core.hpp"
+#include "hazel/core/log.hpp"
 #include "hazel/core/timestep.hpp"
-#include "hazel/application.hpp"
+#include "hazel/core/application.hpp"
 #include "hazel/events/application_event.hpp"
-#include "hazel/input.hpp"
+#include "hazel/core/input.hpp"
 #include "hazel/renderer/renderer.hpp"
 
 namespace hazel

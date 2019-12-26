@@ -1,5 +1,5 @@
-#include "hazel/core.hpp"
-#include "hazel/log.hpp"
+#include "hazel/core/core.hpp"
+#include "hazel/core/log.hpp"
 #include "hazel/events/event.hpp"
 #include "hazel/events/key_event.hpp"
 #include "hazel/events/application_event.hpp"

@@ -1,6 +1,6 @@
-#include "hazel/core.hpp"
-#include "hazel/renderer/buffer.hpp"
+#include "hazel/core/core.hpp"
 #include "hazel/platform/opengl/opengl_buffer.hpp"
+#include "hazel/renderer/buffer.hpp"
 #include "hazel/renderer/renderer.hpp"
 
 namespace hazel
