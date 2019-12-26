@@ -10,6 +10,8 @@
 #include "hazel/hazel.hpp"
 #include "hazel/renderer/texture.hpp"
 
+#include "sandbox_2d.hpp"
+
 class ExampleLayer : public hazel::Layer
 {
 public:
@@ -210,7 +212,10 @@ private:
 class Sandbox : public hazel::Application
 {
 public:
-  Sandbox() { push_layer(std::make_unique<ExampleLayer>()); }
+  Sandbox() {
+    // push_layer(std::make_unique<ExampleLayer>());
+    push_layer(std::make_unique<Sandbox2D>());
+  }
 
   ~Sandbox() {}
 

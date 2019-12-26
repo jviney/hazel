@@ -28,9 +28,3 @@
 #include "hazel/renderer/vertex_array.hpp"
 
 #include "hazel/renderer/orthographic_camera.hpp"
-
-//
-// Entry point
-//
-
-#include "hazel/core/entry_point.hpp"
