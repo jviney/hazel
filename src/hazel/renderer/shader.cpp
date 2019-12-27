@@ -1,5 +1,4 @@
 #include "hazel/core/core.hpp"
-#include "hazel/core/log.hpp"
 #include "hazel/platform/opengl/opengl_shader.hpp"
 #include "hazel/renderer/renderer.hpp"
 #include "hazel/renderer/shader.hpp"

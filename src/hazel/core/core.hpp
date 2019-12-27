@@ -11,6 +11,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include "hazel/core/log.hpp"
+
 #ifdef HZ_DEBUG
   #define HZ_ENABLE_ASSERTS
 #endif

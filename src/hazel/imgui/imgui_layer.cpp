@@ -1,6 +1,5 @@
 #include "hazel/core/core.hpp"
 
-#include "hazel/core/log.hpp"
 #include "hazel/core/application.hpp"
 #include "hazel/events/event.hpp"
 #include "hazel/imgui/imgui_layer.hpp"

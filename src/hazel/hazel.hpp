@@ -4,7 +4,6 @@
 
 #include "hazel/core/application.hpp"
 #include "hazel/core/layer.hpp"
-#include "hazel/core/log.hpp"
 
 #include "hazel/core/timestep.hpp"
 

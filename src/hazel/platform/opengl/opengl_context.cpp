@@ -1,5 +1,4 @@
 #include "hazel/core/core.hpp"
-#include "hazel/core/log.hpp"
 #include "hazel/platform/opengl/opengl_context.hpp"
 
 #include <glad/glad.h>
