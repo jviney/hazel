@@ -2,8 +2,6 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-#include "hazel/platform/opengl/opengl_shader.hpp"
-
 #include "sandbox_2d.hpp"
 #include "hazel/core/entry_point.hpp"
 
@@ -20,14 +18,9 @@ void Sandbox2D::on_update(hazel::Timestep ts) {
   hazel::RenderCommand::clear();
 
   hazel::Renderer2D::begin_scene(camera_controller_.camera());
-  hazel::Renderer2D::draw_quad({0.0f, 0.0f}, {1.0f, 1.0f}, {0.8f, 0.2f, 0.3f, 1.0f});
+  hazel::Renderer2D::draw_quad({-1.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 0.2f, 0.3f, 1.0f});
+  hazel::Renderer2D::draw_quad({0.5f, -0.5f}, {0.5f, 0.75f}, {0.2f, 0.3f, 0.8f, 1.0f});
   hazel::Renderer2D::end_scene();
-
-  // flat_color_shader_->bind();
-
-  // TODO: Add Shader::set_mat4 and Shader::set_float4
-  // std::dynamic_pointer_cast<hazel::OpenGLShader>(flat_color_shader_)->upload_uniform_float4("u_color",
-  // square_color_);
 }
 
 void Sandbox2D::on_imgui_render() {

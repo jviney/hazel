@@ -5,6 +5,8 @@
 #include "hazel/renderer/vertex_array.hpp"
 #include "hazel/platform/opengl/opengl_shader.hpp"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 namespace hazel
 {
 
@@ -46,10 +48,9 @@ void Renderer2D::init() {
 void Renderer2D::shutdown() { s_data.reset(); }
 
 void Renderer2D::begin_scene(const OrthographicCamera& camera) {
-  auto* shader = dynamic_cast<OpenGLShader*>(s_data->flat_color_shader.get());
+  auto& shader = s_data->flat_color_shader;
   shader->bind();
-  shader->upload_uniform_mat4("u_view_projection", camera.view_projection_matrix());
-  shader->upload_uniform_mat4("u_transform", glm::mat4(1.0f));
+  shader->set_mat4("u_view_projection", camera.view_projection_matrix());
 }
 
 void Renderer2D::end_scene() {}
@@ -61,9 +62,13 @@ void Renderer2D::draw_quad(const glm::vec2& position, const glm::vec2& size,
 
 void Renderer2D::draw_quad(const glm::vec3& position, const glm::vec2& size,
                            const glm::vec4& color) {
-  auto* shader = dynamic_cast<OpenGLShader*>(s_data->flat_color_shader.get());
+  auto& shader = s_data->flat_color_shader;
   shader->bind();
-  shader->upload_uniform_float4("u_color", color);
+  shader->set_float4("u_color", color);
+
+  auto transform = glm::translate(glm::mat4(1.0f), position) *
+                   glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+  shader->set_mat4("u_transform", transform);
 
   s_data->quad_vertex_array->bind();
   RenderCommand::draw_indexed(s_data->quad_vertex_array.get());
