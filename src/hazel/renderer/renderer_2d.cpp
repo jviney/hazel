@@ -13,6 +13,7 @@ namespace hazel
 struct Renderer2DStorage {
   Scope<VertexArray> quad_vertex_array;
   Scope<Shader> flat_color_shader;
+  Scope<Shader> texture_shader;
 };
 
 static Scope<Renderer2DStorage> s_data;
@@ -43,14 +44,18 @@ void Renderer2D::init() {
   s_data->quad_vertex_array->set_index_buffer(square_index_buffer_);
 
   s_data->flat_color_shader = hazel::Shader::create("../assets/shaders/flat_color.glsl");
+  s_data->texture_shader = hazel::Shader::create("../assets/shaders/texture.glsl");
+  s_data->texture_shader->set_int("t_texture", 0);
 }
 
 void Renderer2D::shutdown() { s_data.reset(); }
 
 void Renderer2D::begin_scene(const OrthographicCamera& camera) {
-  auto& shader = s_data->flat_color_shader;
-  shader->bind();
-  shader->set_mat4("u_view_projection", camera.view_projection_matrix());
+  s_data->flat_color_shader->bind();
+  s_data->flat_color_shader->set_mat4("u_view_projection", camera.view_projection_matrix());
+
+  s_data->texture_shader->bind();
+  s_data->flat_color_shader->set_mat4("u_view_projection", camera.view_projection_matrix());
 }
 
 void Renderer2D::end_scene() {}
@@ -69,6 +74,25 @@ void Renderer2D::draw_quad(const glm::vec3& position, const glm::vec2& size,
   auto transform = glm::translate(glm::mat4(1.0f), position) *
                    glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
   shader->set_mat4("u_transform", transform);
+
+  s_data->quad_vertex_array->bind();
+  RenderCommand::draw_indexed(s_data->quad_vertex_array.get());
+}
+
+void Renderer2D::draw_quad(const glm::vec2& position, const glm::vec2& size,
+                           const Ref<Texture2D>& texture) {
+  draw_quad({position.x, position.y, 1.0f}, size, texture);
+}
+
+void Renderer2D::draw_quad(const glm::vec3& position, const glm::vec2& size,
+                           const Ref<Texture2D>& texture) {
+  s_data->texture_shader->bind();
+
+  auto transform = glm::translate(glm::mat4(1.0f), position) *
+                   glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+  s_data->texture_shader->set_mat4("u_transform", transform);
+
+  texture->bind();
 
   s_data->quad_vertex_array->bind();
   RenderCommand::draw_indexed(s_data->quad_vertex_array.get());

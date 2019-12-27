@@ -159,6 +159,10 @@ void OpenGLShader::unbind() const { glUseProgram(0); }
 
 const std::string& OpenGLShader::name() const { return name_; }
 
+void OpenGLShader::set_int(const std::string& name, int value) const {
+  upload_uniform_int(name, value);
+}
+
 void OpenGLShader::set_float3(const std::string& name, const glm::vec3& value) const {
   upload_uniform_float3(name, value);
 }

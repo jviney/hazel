@@ -21,6 +21,7 @@ private:
   hazel::Ref<hazel::VertexBuffer> square_vertex_buffer_;
   hazel::Ref<hazel::IndexBuffer> square_index_buffer_;
   hazel::Ref<hazel::Shader> flat_color_shader_;
+  hazel::Ref<hazel::Texture2D> checkerboard_texture_;
 
   glm::vec4 square_color_{0.2f, 0.3f, 0.8f, 1.0f};
 };
